@@ -1,0 +1,33 @@
+paths:
+  /encode/{iso_string}
+parameters:
+  - name: iso_string
+    in: path
+    type: string
+    required: true
+examples:
+  2023-03-28T17:27:00.123420: {"decoded":"57E72DC5B0078870",
+                               "encoded":"2023-03-28T17:27:00.123420",
+                               "type":"TYPE_DTS"}
+responses:
+  "200":
+    description: Successful operation
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            encoded:
+              type: string
+              example: 2023
+            decoded:
+              type: string
+              example: 57E72DC5B0078870
+            type:
+              # TODO: Convert to an enum
+              #       [TYPE_D, TYPE_T, TYPE_DT,
+              #        TYPE_DTS, TYPE_DTZ, TYPE_DTSZ]
+              type: string
+              example: TYPE_DTS
+  "400":
+    description: Invalid ISO String
