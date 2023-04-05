@@ -1,36 +1,29 @@
 from flask import Flask
 from flask_restful import Api
-from flasgger import Swagger
+from flask_swagger_ui import get_swaggerui_blueprint
 from src.routes.encode import Encode
 
 # Create application
 app = Flask(__name__,
-            template_folder="templates")
+            template_folder="templates",
+            static_folder="static")
+
 # Create the API
-api = Api(app)
+api = Api(app, prefix="/api/v1/temporenc")
+
+# Configure Swagger UI
+SWAGGER_URL = '/api/v1/temporenc/docs'              # URL
+API_URL = '/static/api/v1/temporenc/docs/api.json'  # Path to Swagger.json file
+
+# Call factory function to create our blueprint
+swaggerui_blueprint = get_swaggerui_blueprint(
+    SWAGGER_URL,  # Swagger UI static files will be mapped to '{SWAGGER_URL}/dist/'
+    API_URL,
+    config={  # Swagger UI config overrides
+        'app_name': "Temporenc API"
+    },
+)
 
 # Set Endpoints
-api.add_resource(Encode, '/api/v1/temporenc/encode/<iso_string>')
-
-# Swagger config
-# TODO: #7 Extract Swagger Meta to an External File
-template = {
-    "version": "3.0.1",
-    "info": {
-        'title': 'Temporenc API',
-        "summary": "api which encodes and decodes dates.",
-        "description":
-            "<h2>A Temporenc API</h2>" +
-            "<ul>"
-            "<li>Encodes date, time, and datetime ISO strings.<br/>" +
-            "<li>Decodes Temporenc encoded values." +
-            "</ul>",
-        "contact": {
-            "name": "Temporenc API Support",
-            "email": "temporenc.api.support.v@qneni.com"},
-        "version": "3.0.1",
-    },
-    "basePath": "/api/v1/temporenc/encode",
-}
-
-swagger = Swagger(app, template=template)
+app.register_blueprint(swaggerui_blueprint)       # /docs
+api.add_resource(Encode, '/encode/<iso_string>')  # /encode/<iso_string>

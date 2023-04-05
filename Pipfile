@@ -9,8 +9,8 @@ verify_ssl = true
 flask = "*"
 setuptools = "*"
 install = "*"
-flasgger = "*"
 flask-restful = "*"
+flask-swagger-ui = "*"
 
 [requires]
 python_version = "3.1"
