@@ -1,0 +1,90 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Temporenc",
+    "description": "## An API to Temporenc encode/decode dates\n- Encodes *date*, *time*, or *datetime* ISO strings.\n- Decodes Temporenc encoded values.\n",
+    "version": "0.0.1",
+    "contact": {
+      "name": "Temporenc API Team",
+      "email": "temporenc.api.team.v@qneni.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "/v1/temporenc/"
+    }
+  ],
+  "tags": [
+    {
+      "name": "encode",
+      "description": "Encode *date*, *time*, or *datetime* ISO strings."
+    },
+    {
+      "name": "decode",
+      "description": "**[Not Implemented]** Decode Temporenc hexadecimal strings.\n"
+    }
+  ],
+  "paths": {
+    "/encode/{iso_string}": {
+      "get": {
+        "summary": "Encode an ISO string",
+        "tags": [
+          "encode"
+        ],
+        "operationId": "doEncode",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "iso_string",
+            "description": "ISO string to encode.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codec"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID ISO String"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Codec": {
+        "type": "object",
+        "properties": {
+          "encoded": {
+            "type": "string",
+            "example": "2023-03-28T17:27:00.123Z"
+          },
+          "decoded": {
+            "type": "string",
+            "example": "57E72DC5B0078870"
+          },
+          "type": {
+            "type": "string",
+            "example": "TYPE_DTS"
+          }
+        },
+        "example": {
+          "decoded": "57E72DC5B0078870",
+          "type": "TYPE_DTS",
+          "encoded": "2023-03-28T17:27:00.123Z"
+        }
+      }
+    }
+  }
+}
