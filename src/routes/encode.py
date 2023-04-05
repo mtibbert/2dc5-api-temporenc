@@ -1,10 +1,9 @@
 from flask_restful import Resource
-from flasgger import swag_from
 
 
 class Encode(Resource):
 
-    @swag_from('encode.yaml')
+    # @swag_from('encode.yaml')
     def get(self, iso_string) -> object:
         """
         Encode ISO string
