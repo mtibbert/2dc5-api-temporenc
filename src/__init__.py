@@ -3,9 +3,6 @@ from flask_restful import Api
 from flask_swagger_ui import get_swaggerui_blueprint
 from src.routes.encode import Encode
 
-
-# TODO: #7 Extract Swagger Meta to an External File
-
 # Create application
 app = Flask(__name__,
             template_folder="templates",

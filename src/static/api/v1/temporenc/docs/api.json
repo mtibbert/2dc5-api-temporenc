@@ -11,7 +11,7 @@
   },
   "servers": [
     {
-      "url": "/v1/temporenc/"
+      "url": "/api/v1/temporenc/"
     }
   ],
   "tags": [
