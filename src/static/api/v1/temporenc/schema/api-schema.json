@@ -76,6 +76,9 @@
           },
           "type": {
             "type": "string",
+            "enum": [
+              "TYPE_D","TYPE_T","TYPE_DT",
+              "TYPE_DTS","TYPE_DTZ","TYPE_DTSZ"],
             "example": "TYPE_DTS"
           }
         },
