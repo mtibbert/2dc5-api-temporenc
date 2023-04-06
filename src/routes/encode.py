@@ -16,6 +16,7 @@ class Encode(Resource):
         :rtype: Codec
         """
         return {
-            'encoded': iso_string,
             'decoded': iso_string[::-1],
+            'encoded': iso_string,
+            'precision': "PRECISION_MILLI",
             'type': 'TYPE_DTS'}

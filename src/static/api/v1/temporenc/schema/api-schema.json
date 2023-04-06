@@ -66,13 +66,24 @@
       "Codec": {
         "type": "object",
         "properties": {
+          "decoded": {
+            "type": "string",
+            "example": "57E72DC5B0078870"
+          },
           "encoded": {
             "type": "string",
             "example": "2023-03-28T17:27:00.123Z"
           },
-          "decoded": {
+          "precision": {
             "type": "string",
-            "example": "57E72DC5B0078870"
+            "example": "PRECISION_MILLI",
+            "enum": [
+              "PRECISION_MICRO",
+              "PRECISION_MILLI",
+              "PRECISION_NANO",
+              "PRECISION_NONE",
+              "PRECISION_NON_PRECISE"
+            ]
           },
           "type": {
             "type": "string",
