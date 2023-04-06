@@ -2,9 +2,9 @@ import unittest
 from src import app
 
 
-class TestDocs(unittest.TestCase):
+class TestSchema(unittest.TestCase):
 
-    prefix = "/api/v1/temporenc/docs/"
+    prefix = "/api/v1/temporenc/schema/"
 
     def setUp(self):
         self.app = app.test_client()
@@ -15,7 +15,7 @@ class TestDocs(unittest.TestCase):
         self.assertEqual(expected, response.request.method)
 
     def test_request_path_is_docs(self):
-        expected = "/api/v1/temporenc/docs/"
+        expected = "/api/v1/temporenc/schema/"
         response = self.app.get(self.prefix)
         self.assertEqual(expected, response.request.path)
 
