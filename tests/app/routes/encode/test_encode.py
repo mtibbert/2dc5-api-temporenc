@@ -13,7 +13,7 @@ class TestEncodeGet(unittest.TestCase):
         iso = "1923"
         url = f'{self.prefix}{iso}'
         expected = {"decoded": "3291", "encoded": "1923",
-                    "precision": "PRECISION_MILLI", "type": "TYPE_DTS"}
+                    "precision": "PRECISION_MILLI", "type_ext": "TYPE_DTS"}
         response = self.app.get(url)
         self.assertDictEqual(expected, response.get_json())
 
