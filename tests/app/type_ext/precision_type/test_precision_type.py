@@ -1,5 +1,5 @@
 import unittest
-from src.types.precision_type import PrecisionType
+from src.type_ext.precision_type import PrecisionType
 
 
 class TestPrecisionType(unittest.TestCase):

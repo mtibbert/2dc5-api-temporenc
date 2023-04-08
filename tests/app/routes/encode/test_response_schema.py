@@ -9,7 +9,7 @@ class TestResponseSchema(unittest.TestCase):
     iso = "1983-01-15T18:25:12.123456"
     url = f'{prefix}{iso}'
 
-    response_props = ["decoded", "encoded", "precision", "type"]
+    response_props = ["decoded", "encoded", "precision", "type_ext"]
 
     type_enum = ["TYPE_D", "TYPE_T", "TYPE_DT",
                  "TYPE_DTS", "TYPE_DTZ", "TYPE_DTSZ"]
@@ -39,7 +39,7 @@ class TestResponseSchema(unittest.TestCase):
     def test_response_type_property_is_in_enum(self):
         # TODO: #6 Expand test once encode is implemented
         json = self.response.get_json()
-        actual = json["type"]
+        actual = json["type_ext"]
         self.assertIn(actual, self.type_enum)
 
     def test_response_precision_property_when_not_enum_fails(self):
