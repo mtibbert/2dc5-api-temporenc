@@ -1,16 +1,36 @@
 import unittest
 from routes.encode.components.parsers.iso_strings.parse_iso_strings import Parse
-from src.types.precision_type import PrecisionType
+from type_ext import IsoDict, PrecisionType
 
 
 class TestParseTzAwareStr(unittest.TestCase):
+
+    empty_iso_dict: IsoDict = {
+        "iso": None,
+        "meta": {
+             "has_date_time": {},
+             "is_precise": {},
+             "is_tz_aware": {}
+         },
+        "components": {
+             "date": {},
+             "precision": {},
+             "time": {},
+             "tz": {
+                 "direction": "",
+                 "hour": "",
+                 "minute": "",
+                 "offset": ""
+             }
+         }
+    }
 
     expected_properties = {
         "date": ["year", "month", "day"],
         "precision": ["precision", "subsecond"],
         "subsecond": ["precision", "subsecond"],
         "time": ["hour", "minute", "second"],
-        "tz": ["direction", "hour", "minute", "tz_offset"],
+        "tz": ["direction", "hour", "minute", "offset"],
     }
 
     def setUp(self) -> None:
@@ -31,7 +51,11 @@ class TestParseTzAwareStr(unittest.TestCase):
             with self.subTest(item['iso']):
                 d = Parse.tz_aware_iso_string(f'{item["iso"]}')
                 actual = d["components"]["date"]
-                self.assertDictEqual(item["expected"], actual)
+                expected = item["expected"]
+                self.assertListEqual(list(expected.keys()), list(actual))
+                self.assertEqual(expected["year"], actual["year"])
+                self.assertEqual(expected["month"], actual["month"])
+                self.assertEqual(expected["day"], actual["day"])
 
     def test_component_precision(self):
         dataprovider = [
@@ -60,7 +84,10 @@ class TestParseTzAwareStr(unittest.TestCase):
             with self.subTest(item['iso']):
                 d = Parse.tz_aware_iso_string(f'{item["iso"]}')
                 actual = d["components"]["precision"]
-                self.assertDictEqual(item["expected"], actual)
+                expected = item["expected"]
+                self.assertListEqual(list(expected.keys()), list(actual.keys()))
+                self.assertEqual(expected["subsecond"], actual["subsecond"])
+                self.assertEqual(expected["subsecond"], actual["subsecond"])
 
     def test_component_time(self):
         dataprovider = [
@@ -77,7 +104,11 @@ class TestParseTzAwareStr(unittest.TestCase):
             with self.subTest(item['iso']):
                 d = Parse.tz_aware_iso_string(f'{item["iso"]}')
                 actual = d["components"]["time"]
-                self.assertDictEqual(item["expected"], actual)
+                expected = item["expected"]
+                self.assertListEqual(list(expected.keys()), list(actual.keys()))
+                self.assertEqual(expected["hour"], actual["hour"])
+                self.assertEqual(expected["minute"], actual["minute"])
+                self.assertEqual(expected["second"], actual["second"])
 
     def test_component_tz(self):
         data_provider = [
@@ -86,20 +117,24 @@ class TestParseTzAwareStr(unittest.TestCase):
                  "direction": "-",
                  "hour": "06",
                  "minute": "00",
-                 "tz_offset": "-360"}},
+                 "offset": "-360"}},
             {"iso": "1983-01-15T18:25:12+06:00",
              "expected": {
                  "direction": "+",
                  "hour": "06",
                  "minute": "00",
-                 "tz_offset": "360"}}
+                 "offset": "360"}}
         ]
         for item in data_provider:
             with self.subTest(item['iso']):
-                expected = item["expected"]
                 d = Parse.tz_aware_iso_string(item["iso"])
                 actual = d["components"]["tz"]
-                self.assertDictEqual(expected, actual)
+                expected = item["expected"]
+                self.assertListEqual(list(expected.keys()), list(actual.keys()))
+                self.assertEqual(expected["direction"], actual["direction"])
+                self.assertEqual(expected["hour"], actual["hour"])
+                self.assertEqual(expected["minute"], actual["minute"])
+                self.assertEqual(expected["offset"], actual["offset"])
 
     def test_raises_exception_time_no_colon(self):
         iso = "1983-01-15T18-25-12.123456"
@@ -139,9 +174,9 @@ class TestParseTzAwareStr(unittest.TestCase):
         self.assertListEqual(expected, actual)
 
     def test_returned_dict_has_expected_tz_properties(self):
+        expected = list(self.empty_iso_dict["components"]["tz"].keys())
         iso = "1983-01-15T18:25:12.12345-06:00"
-        expected = self.expected_properties["tz"]
-        d = Parse.tz_aware_iso_string(iso)
+        d: IsoDict = Parse.tz_aware_iso_string(iso)
         actual = list(d["components"]["tz"].keys())
         self.assertListEqual(expected, actual)
 
