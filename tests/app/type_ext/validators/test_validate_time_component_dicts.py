@@ -5,11 +5,14 @@ from type_ext.validators.validate_iso_component_dicts import ValidateDict
 
 class TestValidateTimeDict(ValidateDictBase):
 
+    data_provider = None
+
     def setUp(self) -> None:
-        super().setUp()  # Init data_provider
+        super().setUp()
+        self.data_provider = self.base_data_provider["time_dict"]
 
     def test_invalid_time_dict_should_fail(self):
-        dp = self.data_provider["time_dict"]["fail"]
+        dp = self.data_provider["fail"]
         for item in dp:
             arg: TimeDict = item
             iso = self.join_dict_values(arg, glue=":")
@@ -17,7 +20,7 @@ class TestValidateTimeDict(ValidateDictBase):
                 self.assertFalse(ValidateDict.validate_time_dict(arg))
 
     def test_valid_time_dict_should_pass(self):
-        dp = self.data_provider["time_dict"]["pass"]
+        dp = self.data_provider["pass"]
         for item in dp:
             arg: TimeDict = item
             iso = self.join_dict_values(arg)
