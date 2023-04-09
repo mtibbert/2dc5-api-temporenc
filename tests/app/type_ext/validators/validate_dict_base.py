@@ -9,9 +9,9 @@ class ValidateDictBase(TestCase):
         self.base_data_provider = {
             "date_dict": {
                 "pass": [
-                    {"year": "4094", "month": "12", "day": "31"},   # Max date for encoding
-                    {"year": "4095", "month": None, "day": None},   # Temporenc special year
-                    {"year": "2000", "month": "02", "day": "29"},   # Leap year (div by 400)
+                    {"year": "4094", "month": "12", "day": "31"},   # Max date
+                    {"year": "4095", "month": None, "day": None},   # Temporenc special
+                    {"year": "2000", "month": "02", "day": "29"},   # Leap year div by 400
                     {"year": "9999", "month": "12", "day": "31"},   # Max ISO defined date
                     {"year": "4095", "month": "01", "day": "15"},   #
                     {"year": "1982", "month": "01", "day": "15"},   #
@@ -41,14 +41,36 @@ class ValidateDictBase(TestCase):
                     {"hour": "01", "minute": "01", "second": "1"},   # Single char second
                 ],
                 "fail": [
-                {"hour": "23", "minute": "59", "second": "60"},   # Leap Second
-                {"hour": "001", "minute": "01", "second": "01"},  # Three char hour
-                {"hour": "01", "minute": "001", "second": "01"},  # Three char minute
-                {"hour": "01", "minute": "01", "second": "001"},  # Three char second
-                {"hour": "59", "minute": "01", "second": "01"},   # Invalid char hour
-                {"hour": "01", "minute": "65", "second": "01"},   # Invalid char minute
-                {"hour": "01", "minute": "01", "second": "65"},   # Invalid char second
-            ]}
+                    {"hour": "23", "minute": "59", "second": "60"},   # Leap Second
+                    {"hour": "001", "minute": "01", "second": "01"},  # Three char hour
+                    {"hour": "01", "minute": "001", "second": "01"},  # Three char minute
+                    {"hour": "01", "minute": "01", "second": "001"},  # Three char second
+                    {"hour": "59", "minute": "01", "second": "01"},   # Invalid char hour
+                    {"hour": "01", "minute": "65", "second": "01"},   # Invalid minute
+                    {"hour": "01", "minute": "01", "second": "65"},   # Invalid second
+                ]},
+            "precision_dict": {
+                "pass": [
+                    {"precision": "PRECISION_MICROSECOND", "subsecond": "1"},
+                    {"precision": "PRECISION_MICROSECOND", "subsecond": "12"},
+                    {"precision": "PRECISION_MICROSECOND", "subsecond": "123"},
+                    {"precision": "PRECISION_MILLISECOND", "subsecond": "123"},
+                    {"precision": "PRECISION_MILLISECOND", "subsecond": "1234"},
+                    {"precision": "PRECISION_MILLISECOND", "subsecond": "12345"},
+                    {"precision": "PRECISION_MILLISECOND", "subsecond": "123456"},
+                    {"precision": "PRECISION_NANOSECOND", "subsecond": "1234567"},
+                    {"precision": "PRECISION_NANOSECOND", "subsecond": "12345678"},
+                    {"precision": "PRECISION_NANOSECOND", "subsecond": "123456789"},
+                    {"precision": "PRECISION_NONE", "subsecond": None},
+                    {"precision": "PRECISION_NON_PRECISE", "subsecond": None},
+                ],
+                "fail": [
+                    {"precision": "foo", "subsecond": "123456"},
+                    {"precision": "PRECISION_MICROSECOND", "subsecond": None},
+                    {"precision": "PRECISION_MICROSECOND", "subsecond": "1234"},
+                    {"precision": "PRECISION_NANOSECOND", "subsecond": "1234567891"},
+                ]
+            }
         }
 
     @staticmethod
