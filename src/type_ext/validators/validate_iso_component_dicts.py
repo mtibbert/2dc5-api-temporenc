@@ -1,5 +1,5 @@
-from type_ext import DateDict
 from datetime import datetime
+from type_ext import DateDict, TimeDict
 
 
 class ValidateDict:
@@ -28,3 +28,29 @@ class ValidateDict:
             date = datetime.fromisoformat(iso)
         finally:
             return date is not None
+
+    @staticmethod
+    def validate_time_dict(time_dict: TimeDict):
+        """
+        Validate TimeDict members parse to a valid time.
+
+        Notes: * ISO strings in the form HH, are validated against HH:01:01
+               * ISO strings in the form HH:MM, are validated against HH:MM:01
+
+        :param time_dict:        {TimeDict} TimeDict to evaluate
+        :return:                 {bool} True if TimeDict members parse to a valid time.
+
+        >>> cls = ValidateDict
+        >>> cls.validate_time_dict({"hour": "23", "minute": "59", "second": "59"})
+        True
+        >>> cls.validate_time_dict({"hour": "23", "minute": "59", "second": None})
+        True
+        """
+        time = None
+        time_str = (f'{time_dict["hour"]}:' +
+                    f'{time_dict["minute"]}:' +
+                    f'{time_dict["second"]}').replace("None", "01")
+        try:
+            time = datetime.strptime(time_str, '%H:%M:%S')
+        finally:
+            return time is not None
