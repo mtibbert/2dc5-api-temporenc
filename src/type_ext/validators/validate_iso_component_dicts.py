@@ -1,5 +1,7 @@
+import re
 from datetime import datetime
-from type_ext import DateDict, TimeDict, PrecisionDict, PrecisionType
+from type_ext import PrecisionType
+from type_ext import DateDict, TimeDict, PrecisionDict, TzDict
 
 
 class ValidateDict:
@@ -99,3 +101,62 @@ class ValidateDict:
             time = datetime.strptime(time_str, '%H:%M:%S')
         finally:
             return time is not None
+
+    @staticmethod
+    def validate_tz_dict(tz_dict: TzDict):
+        """
+        Validate TzDict member.
+
+        Notes
+            * Direction: Should be "+" or "-"
+            * Hour:      Hour should be "00" to "12",
+                         If Direction is "+", "13" and "14" is allowed
+            * Minute:    "00", "15", "30", "45" or "60"
+            * Offset:     Should match calculated offset
+
+        :param tz_dict: {TzDict} TimeDict to evaluate
+        :return:        {bool}   True if TzDict members are valid.
+
+        >>> cls = ValidateDict
+        >>> l = [
+        ... {"direction": "+", "hour": "01", "minute": "30", "offset": "90"},
+        ... {"direction": "+", "hour": "01", "minute": "30", "offset": "+90"},
+        ... {"direction": "-", "hour": "01", "minute": "30", "offset": "-90"},
+        ... {"direction": "-", "hour": "01", "minute": "31", "offset": "-91"},
+        ... ]
+        >>> cls.validate_tz_dict(l[0]) == True
+        True
+        >>> cls.validate_tz_dict(l[1]) == True
+        True
+        >>> cls.validate_tz_dict(l[2]) == True
+        True
+        >>> cls.validate_tz_dict(l[3]) == False
+        True
+        """
+        # Validate Direction: Should be "+" or "-"
+        dir_is_val = tz_dict["direction"] in ["+", "-"]
+        #
+        # Validate Hour - Hour should be "00" to "12",
+        #                 If Direction is "+", "13" and "14" is allowed
+        #
+        hh_is_valid = re.match(r"^0[0-9]|1[0-4]$", tz_dict["hour"]) is not None
+        #
+        # Validate Minute - Should be "00", "15", "30", "45" or "60"
+        mm_is_valid = tz_dict["minute"] in ["00", "15", "30", "45", "60"]
+        #
+        # Validate Offset - tz_dict["offset"] should match calculated offset
+        #
+        offset_is_valid = (re.match(r"^[+-]?\d{1,3}$", tz_dict["minute"]) is not None
+                           and hh_is_valid and mm_is_valid)
+        if offset_is_valid:
+            # Calculate offset and compare to tz_dict["offset"]
+            offset_expected = tz_dict["direction"] + str(
+                (int(tz_dict["hour"]) * 60) + int(tz_dict["minute"]))\
+                .zfill(2)
+            if tz_dict["offset"][0] in ["+", "-"]:
+                offset_actual = tz_dict["offset"]
+            else:
+                offset_actual = f'{tz_dict["direction"]}{tz_dict["offset"]}'
+            offset_is_valid = offset_actual == offset_expected
+
+        return dir_is_val and hh_is_valid and mm_is_valid and offset_is_valid

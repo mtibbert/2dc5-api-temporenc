@@ -70,6 +70,23 @@ class ValidateDictBase(TestCase):
                     {"precision": "PRECISION_MICROSECOND", "subsecond": "1234"},
                     {"precision": "PRECISION_NANOSECOND", "subsecond": "1234567891"},
                 ]
+            },
+            "tz_dict": {
+                "pass": [
+                    {"direction": "+", "hour": "01", "minute": "30", "offset": "90"},
+                    {"direction": "+", "hour": "01", "minute": "30", "offset": "+90"},
+                    {"direction": "-", "hour": "05", "minute": "00", "offset": "-300"},
+                    {"direction": "+", "hour": "01", "minute": "30", "offset": "+90"},
+                    {"direction": "+", "hour": "01", "minute": "30", "offset": "+90"},
+                    {"direction": "-", "hour": "01", "minute": "30", "offset": "-90"},
+                    {"direction": "+", "hour": "01", "minute": "30", "offset": "90"},
+                ],
+                "fail": [
+                    {"direction": "&", "hour": "01", "minute": "30", "offset": "+90"},
+                    {"direction": "+", "hour": "25", "minute": "30", "offset": "+90"},
+                    {"direction": "-", "hour": "01", "minute": "32", "offset": "-92"},
+                    {"direction": "+", "hour": "01", "minute": "32", "offset": "92"},
+                ]
             }
         }
 
