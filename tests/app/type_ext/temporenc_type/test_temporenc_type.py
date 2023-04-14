@@ -1,5 +1,5 @@
 import unittest
-from src.types.temporenc_type import TemporencType
+from src.type_ext.temporenc_type import TemporencType
 
 
 class TestTemporencType(unittest.TestCase):
