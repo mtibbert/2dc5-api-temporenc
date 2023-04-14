@@ -1,54 +1,178 @@
 import re
 from type_ext import PrecisionType
 from type_ext import DateDict, IsoDict, PrecisionDict, TimeDict, TzDict
+from type_ext.validators import ValidateDict
 
 
 class Parse:
 
     @classmethod
-    def tz_aware_iso_string(cls, iso: str) -> IsoDict:
+    def iso_string(cls, iso: str) -> IsoDict:
         """
-        Parse timezone aware ISO string and return component metadata.
+        Parse an ISO string and return component metadata.
 
-        :param iso: a timezone aware ISO string in the form
-                    YYYY-MM-DDTHH:MM:SS.sss[+-]hh:mm the subsecond component may be
-                    one to nine digits
+        Recognized ISO strings:
+            * Dates: YYYY, YYYY-MM, YYYY-MM-DD
+            * Times: HH, HH:MM, HH:MM:SS
+            * Subsecond: YYYY-MM-DDTHH:MM:SS.sss (Must be 1 to 9 characters)
+            * TZ Aware:  YYYY-MM-DDTHH:MM:SS[+-]HH:MM or
+                         YYYY-MM-DDTHH:MM:SS.sss[+-]HH:MM
 
-        :return: dict
+        :param iso: an ISO string
+
+        :return: {IsoDict}
         """
         meta = cls._get_meta(iso)
         return meta
 
     @classmethod
-    def _get_meta(cls, iso: str) -> IsoDict:
+    def extract_date_str(cls, iso_str: str) -> str:
         """
-        Create metadata describing ISO string properties.
+        Extract and return an ISO time string from provided string.
 
-        :param iso:
+        :param iso_str: {str} string to search
+        :return: {str} the time string if found, else an empty string is returned.
 
-        :return: IsoDict
+        # >>> Parse.extract_time_str("18:25:12") == "18:25:12"
+        # True
+        # >>> Parse.extract_time_str("18:25:12") == "18:25:12"
+        # True
+        # >>> Parse.extract_time_str("T18:25:12") == "18:25:12"
+        # True
+        # >>> Parse.extract_time_str("1983-01-15T18:25:12") == "18:25:12"
+        # True
+        # >>> Parse.extract_time_str("1983-01-15T18:25:12.123") == "18:25:12"
+        # True
+        # >>> Parse.extract_time_str("1983-01-15T18:25:12+01:00") == "18:25:12"
+        # True
+        # >>> Parse.extract_time_str("1983-01-15T18:25:12.123+01:00") == "18:25:12"
+        True
+
+        # >>> Parse.extract_time_str(items[1]) == items[0]
+        # True
+        # >>> Parse.extract_time_str(items[2]) == items[0]
+        # True
+
         """
-        has_date_time = "T" in iso
-        is_precise = "." in iso
-        is_tz_aware = False
-        if has_date_time:
-            is_tz_aware = re.search(r"[+-]", iso.split("T")[1]) is not None
-        date_component: DateDict = cls._date_2_dict(iso.split("T")[0])
-        precision_component: PrecisionDict = cls._subsecond_from_iso(iso)
-        time_component: TimeDict = cls._time_2_dict(iso.split("T")[1][:8])
-        tz_component: TzDict = cls._tz_from_iso(iso)
-        return {"iso": iso,
-                "meta": {
-                    "has_date_time": has_date_time,
-                    "is_precise": is_precise,
-                    "is_tz_aware": is_tz_aware
-                },
-                "components": {
-                    "date": date_component,
-                    "precision": precision_component,
-                    "time": time_component,
-                    "tz": tz_component
-                }}
+        found_str = ""
+        rx = r"(\d{4}-[01]\d-[0-3]\d)T?"
+        match = re.search(rx, iso_str)
+        if (match is not None
+                and len(iso_str.split("T")[0]) <= len("YYYY-MM-DD")):
+            found_str = match.group(1)
+        return found_str
+
+    @classmethod
+    def extract_precision_str(cls, iso_str: str) -> str:
+        """
+        Extract and return an ISO time string from provided string.
+
+        :param iso_str: {str} string to search
+        :return: {str} the time string if found, else an empty string is returned.
+
+        # >>> Parse.extract_time_str("18:25:12") == "18:25:12"
+        # True
+        # >>> Parse.extract_time_str("18:25:12") == "18:25:12"
+        # True
+        # >>> Parse.extract_time_str("T18:25:12") == "18:25:12"
+        # True
+        # >>> Parse.extract_time_str("1983-01-15T18:25:12") == "18:25:12"
+        # True
+        # >>> Parse.extract_time_str("1983-01-15T18:25:12.123") == "18:25:12"
+        # True
+        # >>> Parse.extract_time_str("1983-01-15T18:25:12+01:00") == "18:25:12"
+        # True
+        # >>> Parse.extract_time_str("1983-01-15T18:25:12.123+01:00") == "18:25:12"
+        True
+
+        # >>> Parse.extract_time_str(items[1]) == items[0]
+        # True
+        # >>> Parse.extract_time_str(items[2]) == items[0]
+        # True
+
+        """
+        found_str = ""
+        rx = r"\.(\d{1,9}):?"
+        match = re.search(rx, iso_str)
+        if match is not None:
+            found_str = match.group(1)
+        return found_str
+
+    @classmethod
+    def extract_time_str(cls, iso_str: str) -> str:
+        """
+        Extract and return an ISO time string from provided string.
+
+        :param iso_str: {str} string to search
+        :return: {str} the time string if found, else an empty string is returned.
+
+        # >>> Parse.extract_time_str("18:25:12") == "18:25:12"
+        # True
+        # >>> Parse.extract_time_str("18:25:12") == "18:25:12"
+        # True
+        # >>> Parse.extract_time_str("T18:25:12") == "18:25:12"
+        # True
+        # >>> Parse.extract_time_str("1983-01-15T18:25:12") == "18:25:12"
+        # True
+        # >>> Parse.extract_time_str("1983-01-15T18:25:12.123") == "18:25:12"
+        # True
+        # >>> Parse.extract_time_str("1983-01-15T18:25:12+01:00") == "18:25:12"
+        # True
+        # >>> Parse.extract_time_str("1983-01-15T18:25:12.123+01:00") == "18:25:12"
+        True
+
+        # >>> Parse.extract_time_str(items[1]) == items[0]
+        # True
+        # >>> Parse.extract_time_str(items[2]) == items[0]
+        # True
+
+        """
+        found_str = ""
+        rx = r"(\d{2}:\d{2}:\d{2})"
+        match = re.search(rx, iso_str)
+        if match is not None:
+            found_str = match.group(1)
+        return found_str
+
+    @classmethod
+    def extract_tz_str(cls, iso_str: str) -> str:
+        """
+        Extract and return an ISO time string from provided string.
+
+        :param iso_str: {str} string to search
+        :return: {str} the time string if found, else an empty string is returned.
+
+        # >>> Parse.extract_time_str("18:25:12") == "18:25:12"
+        # True
+        # >>> Parse.extract_time_str("18:25:12") == "18:25:12"
+        # True
+        # >>> Parse.extract_time_str("T18:25:12") == "18:25:12"
+        # True
+        # >>> Parse.extract_time_str("1983-01-15T18:25:12") == "18:25:12"
+        # True
+        # >>> Parse.extract_time_str("1983-01-15T18:25:12.123") == "18:25:12"
+        # True
+        # >>> Parse.extract_time_str("1983-01-15T18:25:12+01:00") == "18:25:12"
+        # True
+        # >>> Parse.extract_time_str("1983-01-15T18:25:12.123+01:00") == "18:25:12"
+        True
+
+        # >>> Parse.extract_time_str(items[1]) == items[0]
+        # True
+        # >>> Parse.extract_time_str(items[2]) == items[0]
+        # True
+
+        """
+        found_str = ""
+        rx = r"(?:\d{2}:\d{2})?([\-+]\d{2}:\d{2})"
+        match = re.search(rx, iso_str)
+        if match is not None:
+            found_str = match.group(1)
+        return found_str
+
+    #
+    # Class private helpers
+    #
 
     @classmethod
     def _date_2_dict(cls, date_str) -> DateDict:
@@ -64,23 +188,59 @@ class Parse:
             "month": None,
             "day": None
         }
-        if "-" in date_str:
-            parts = date_str.split("-")
-            if len(parts) < 1 or len(parts) > 3:
-                raise ValueError(f"ValueError: {date_str} - Expected string in "
-                                 f"YYYY-MM-DD format")
-            for idx, part in enumerate(parts):
-                match idx:
-                    case 0:
-                        dict_obj["year"] = part
-                    case 1:
-                        dict_obj["month"] = part
-                    case 2:
-                        dict_obj["day"] = part
-        else:
-            raise ValueError(f"ValueError: {date_str} - " +
-                             f"Expected string in YYYY-MM-DD format")
+        parts = []
+        normalized_date_str = Parse.extract_date_str(date_str)
+        if normalized_date_str != "":
+            parts = normalized_date_str.split("-")
+        if (normalized_date_str != ""
+                and (len(parts) < 1 or len(parts) > 3)):
+            raise ValueError(f"ValueError: {date_str} - Expected string in "
+                             f"YYYY-MM-DD format")
+        for idx, part in enumerate(parts):
+            match idx:
+                case 0:
+                    dict_obj["year"] = part
+                case 1:
+                    dict_obj["month"] = part
+                case 2:
+                    dict_obj["day"] = part
         return dict_obj
+
+    @classmethod
+    def _get_meta(cls, iso: str) -> IsoDict:
+        """
+        Create metadata describing ISO string properties.
+
+        :param iso:
+
+        :return: IsoDict
+        """
+        date_component: DateDict = cls._date_2_dict(iso)
+        time_component: TimeDict = cls._time_2_dict(iso)
+        precision_component: PrecisionDict = cls._subsecond_from_iso(iso)
+        tz_component: TzDict = cls._tz_from_iso(iso)
+        has_date = (date_component["year"] is not None
+                    and ValidateDict.validate_date_dict(date_component))
+        has_time = (time_component["hour"] is not None
+                    and ValidateDict.validate_time_dict(time_component))
+        has_date_time = has_date and has_time
+        is_precise = (precision_component["precision"] !=
+                      PrecisionType.PRECISION_NON_PRECISE.name)
+        is_tz_aware = tz_component["direction"] is not None
+        iso_dict: IsoDict = {
+            "iso": iso,
+            "meta": {
+                "has_date_time": has_date_time,
+                "is_precise": is_precise,
+                "is_tz_aware": is_tz_aware
+            },
+            "components": {
+                "date": date_component,
+                "precision": precision_component,
+                "time": time_component,
+                "tz": tz_component
+            }}
+        return iso_dict
 
     @classmethod
     def _subsecond_from_iso(cls, iso_str: str) -> PrecisionDict:
@@ -95,14 +255,12 @@ class Parse:
             "precision": None,
             "subsecond": None
         }
-
-        if len(iso_str.split(".")) == 1:
-            # Subsecond separator not found
+        normalized_precision = cls.extract_precision_str(iso_str)
+        if normalized_precision == "":
+            # Subsecond not present
             dict_obj["precision"] = str(PrecisionType.PRECISION_NON_PRECISE.name)
         else:
-            # Strip off timezone ifo
-            iso_str = iso_str[:re.search(r"\.\d+", iso_str).regs[0][1]]
-            dict_obj["subsecond"] = iso_str.split(".")[1][:9]
+            dict_obj["subsecond"] = normalized_precision
             chars = len(dict_obj["subsecond"])
             if chars < 4:
                 dict_obj["precision"] = str(PrecisionType.PRECISION_MICROSECOND.name)
@@ -115,9 +273,10 @@ class Parse:
     @classmethod
     def _time_2_dict(cls, time_str) -> TimeDict:
         """
-        Create time component metadata dict
+        Create time component metadata dict. If an invalid string is passed the TimeDict
+        properties will all be None.
 
-        :param time_str:
+        :param time_str: {str}
 
         :return: TimeDict
         """
@@ -126,28 +285,23 @@ class Parse:
             "minute": None,
             "second": None
         }
-        if re.search(r"^T?\d{2}:\d{2}:\d{2}(\.\d{1,9})?\+?-?", time_str) is None:
-            raise ValueError(f"{time_str} - Expected string in "
-                             f"HH:SS:SS format")
-        if time_str.startswith("T"):
-            time_str = time_str[1:9]
-        else:
-            time_str = time_str[:8]
-        parts = time_str.split(":")
-        if len(parts) < 1 or len(parts) > 3:
-            raise ValueError(f"ValueError: {time_str} - Expected string in "
-                             f"HH:SS:SS format")
-        for idx, part in enumerate(parts):
-            match idx:
-                case 0:
-                    dict_obj["hour"] = part
-                case 1:
-                    dict_obj["minute"] = part
-                case 2:
-                    dict_obj["second"] = part
-                case _:
-                    raise ValueError(f"{time_str} - " +
-                                     f"Expected string in HH:SS:SS format")
+        parsed_time_str = Parse.extract_time_str(time_str)
+        if len(parsed_time_str) > 0:
+            parts = parsed_time_str.split(":")
+            if len(parts) < 1 or len(parts) > 3:
+                raise ValueError(f"ValueError: {time_str} - Expected string in "
+                                 f"HH:SS:SS format")
+            for idx, part in enumerate(parts):
+                match idx:
+                    case 0:
+                        dict_obj["hour"] = part
+                    case 1:
+                        dict_obj["minute"] = part
+                    case 2:
+                        dict_obj["second"] = part
+                    case _:
+                        raise ValueError(f"{time_str} - " +
+                                         f"Expected string in HH:SS:SS format")
         return dict_obj
 
     @classmethod
@@ -165,20 +319,17 @@ class Parse:
             "minute": None,
             "offset": None,
         }
-
-        regex = r".*([\+-]\d{2}:\d{2})$"
-        matches = re.findall(regex, iso_str)
-        # Expected similar to ['-06:00']
-        if len(matches) > 0 and len(matches[0]) == 6:
-            tz_component = matches[0]
+        normalized_tz_str = cls.extract_tz_str(iso_str)  # Expected similar to '-06:00'
+        rx = r"((?P<direction>[\-+])(?P<hour>\d{2}):(?P<minute>\d{2}))"
+        match = re.search(rx, normalized_tz_str)
+        if match:
             dict_obj: TzDict = {
-                "direction": tz_component[:1],
-                "hour": tz_component[1:3],
-                "minute": tz_component[4:],
-                "offset": None,
+                "direction": match.group(2),
+                "hour": match.group(3),
+                "minute": match.group(4),
+                "offset": None
             }
-            offset = f'{dict_obj["direction"]}{dict_obj["hour"]}.' +\
-                     f'{int((int(dict_obj["minute"]) / 60)).__str__().zfill(2)}'
-            tz_offset = f'{int(float(offset) * 60)}'
+            tz_offset = str((int(f'{dict_obj["direction"]}{dict_obj["hour"]}') * 60) +
+                            (int(dict_obj["minute"])))
             dict_obj["offset"] = tz_offset
         return dict_obj
