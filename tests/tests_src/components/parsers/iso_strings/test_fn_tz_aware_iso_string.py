@@ -1,5 +1,6 @@
 import unittest
-from tests_src.components.parsers.iso_strings.parse_iso_string_base import ParseIsoStringBase
+from tests_src.components.parsers.iso_strings.parse_iso_string_base \
+    import ParseIsoStringBase
 from components.parsers.iso_strings.parse_iso_strings import Parse
 from type_ext.validators import ValidateDict
 from type_ext import DateDict
