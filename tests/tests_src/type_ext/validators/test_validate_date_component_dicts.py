@@ -1,4 +1,4 @@
-from app.type_ext.validators.validate_dict_base import ValidateDictBase
+from tests_src.type_ext.validators.validate_dict_base import ValidateDictBase
 from type_ext import DateDict
 from type_ext.validators.validate_iso_component_dicts import ValidateDict
 

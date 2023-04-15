@@ -7,7 +7,7 @@ from type_ext.validators import ValidateDict
 class Parse:
 
     @classmethod
-    def iso_string(cls, iso: str) -> IsoDict:
+    def iso_to_iso_dict(cls, iso: str) -> IsoDict:
         """
         Parse an ISO string and return component metadata.
 

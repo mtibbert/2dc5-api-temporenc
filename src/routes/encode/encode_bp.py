@@ -11,7 +11,7 @@ def do_encode_iso(iso_string: str) -> object:
     Returns uppercase hexadecimal Temporenc encoded string # noqa: E501
 
     :param iso_string: ISO string to encode
-    :type_ext iso_string: str
+    :type_ext iso_to_iso_dict: str
 
     :rtype: Codec
     """

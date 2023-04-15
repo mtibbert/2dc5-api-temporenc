@@ -3,7 +3,7 @@ from typing import List
 from type_ext import IsoDict
 
 
-class ParseIsoStringBase(unittest.TestCase):
+class TestsParseIsoStringBase(unittest.TestCase):
 
     def setUp(self) -> None:
         self.data_provider = {
@@ -487,15 +487,15 @@ class ParseIsoStringBase(unittest.TestCase):
     #     :param generate_hours:
     #     :return:
     #
-    #     # >>> ParseIsoStringBase.generate_date_time_list(start_hour=23)
+    #     # >>> TestsParseIsoStringBase.generate_date_time_list(start_hour=23)
     #     # ['23', '2', '0']
-    #     # >>> ParseIsoStringBase.generate_date_time_list(start_hour=24)
+    #     # >>> TestsParseIsoStringBase.generate_date_time_list(start_hour=24)
     #     # ['12', '2', '0']
-    #     # >>> ParseIsoStringBase.generate_date_time_list(start_hour=0)
+    #     # >>> TestsParseIsoStringBase.generate_date_time_list(start_hour=0)
     #     # ['0', '2', '0']
-    #     # >>> ParseIsoStringBase.generate_date_time_list(start_hour=-1)
+    #     # >>> TestsParseIsoStringBase.generate_date_time_list(start_hour=-1)
     #     # ['12', '2', '0']
-    #     >>> ParseIsoStringBase.generate_date_time_list(start_hour=23, generate_hours=2)
+    #     >>> TestsParseIsoStringBase.generate_date_time_list(start_hour=23, generate_hours=2)
     #     ['23', '2', '1']
     #     """
     #     ret_list = []
@@ -527,7 +527,7 @@ class ParseIsoStringBase(unittest.TestCase):
                             incrementation. Default is 1
         :return:
 
-        >>> cls = ParseIsoStringBase
+        >>> cls = TestsParseIsoStringBase
 
         # Valid call(s)
         >>> cls.generate_couplet(22, 25)
@@ -633,7 +633,7 @@ class ParseIsoStringBase(unittest.TestCase):
                                  incrementation. Default is 1
         :return:
 
-        >>> cls = ParseIsoStringBase
+        >>> cls = TestsParseIsoStringBase
 
         # Valid call(s)
         -- Check defaults
@@ -650,7 +650,7 @@ class ParseIsoStringBase(unittest.TestCase):
         """
         ret_list = []
         try:
-            hh = ParseIsoStringBase.generate_couplet(hour_start, hour_stop, hour_step)
+            hh = TestsParseIsoStringBase.generate_couplet(hour_start, hour_stop, hour_step)
         except ValueError as ve:
             args_str = f'start={hour_start}, stop={hour_stop}, step={hour_step}'
             msg = f'Error generating hour(s); '
@@ -658,7 +658,7 @@ class ParseIsoStringBase(unittest.TestCase):
             msg += f'Review stack trace for additional information.'
             raise ValueError(msg) from ve
         try:
-            iso = ParseIsoStringBase.generate_minutes(
+            iso = TestsParseIsoStringBase.generate_minutes(
                 min_start, min_stop, min_step,
                 sec_start, sec_stop, sec_step)
         except ValueError as ve:
@@ -692,7 +692,7 @@ class ParseIsoStringBase(unittest.TestCase):
                             incrementation. Default is 1
         :return:
 
-        >>> cls = ParseIsoStringBase
+        >>> cls = TestsParseIsoStringBase
 
         # Valid call(s)
         # -- Check defaults
@@ -714,7 +714,7 @@ class ParseIsoStringBase(unittest.TestCase):
         ret_list = []
 
         try:
-            ss = ParseIsoStringBase.generate_couplet(sec_start, sec_stop, sec_step)
+            ss = TestsParseIsoStringBase.generate_couplet(sec_start, sec_stop, sec_step)
         except ValueError as ve:
             args_str = f'start={sec_start}, stop={sec_stop}, step={sec_step}'
             msg = f'Invalid call to generate seconds; '
@@ -722,7 +722,7 @@ class ParseIsoStringBase(unittest.TestCase):
             msg += f'Review stack trace for additional information.'
             raise ValueError(msg) from ve
         try:
-            mm = ParseIsoStringBase.generate_couplet(min_start, min_stop, min_step)
+            mm = TestsParseIsoStringBase.generate_couplet(min_start, min_stop, min_step)
         except ValueError as ve:
             args_str = f'start={min_start}, stop={min_stop}, step={min_step}'
             msg = f'Invalid call to generate minutes; '
