@@ -1,7 +1,7 @@
 import unittest
-from tests_src.components.parsers.iso_strings.tests_parse_iso_string_base \
+from tests_src.components.parsers.tests_parse_iso_string_base \
     import TestsParseIsoStringBase
-from components.parsers.iso_strings.parse_iso_strings import Parse
+from components.parsers.parse_iso_strings import Parse
 from type_ext.validators import ValidateDict
 from type_ext import DateDict
 
@@ -19,7 +19,7 @@ class TestTestsParseTzAwareStr(TestsParseIsoStringBase):
             assert type_key not in ["TYPE_T"]  # Test requires date component
             for item in data_provider[type_key]:
                 with self.subTest(item['iso']):
-                    d = Parse.iso_string(f'{item["iso"]}')
+                    d = Parse.iso_to_iso_dict(f'{item["iso"]}')
                     actual: DateDict = d["components"]["date"]
                     expected = item["expected"]["components"]["date"]
                     # Assert valid date, validate_date_dict() always false for TYPE_T
@@ -34,7 +34,7 @@ class TestTestsParseTzAwareStr(TestsParseIsoStringBase):
         for type_key in dp_keys:
             for item in self.data_provider[type_key]:
                 with self.subTest(item['iso']):
-                    d = Parse.iso_string(f'{item["iso"]}')
+                    d = Parse.iso_to_iso_dict(f'{item["iso"]}')
                     actual = d["components"]["precision"]
                     expected = item["expected"]["components"]["precision"]
                     self.assertTrue(ValidateDict.validate_precision_dict(actual))
@@ -47,7 +47,7 @@ class TestTestsParseTzAwareStr(TestsParseIsoStringBase):
         for type_key in dp_keys:
             for item in self.data_provider[type_key]:
                 with self.subTest(item['iso']):
-                    d = Parse.iso_string(f'{item["iso"]}')
+                    d = Parse.iso_to_iso_dict(f'{item["iso"]}')
                     actual = d["components"]["time"]
                     expected = item["expected"]["components"]["time"]
                     self.assertTrue(ValidateDict.validate_time_dict(actual))
@@ -63,7 +63,7 @@ class TestTestsParseTzAwareStr(TestsParseIsoStringBase):
             assert type_key in ["TYPE_DTZ", "TYPE_DTSZ"]  # Test requires tz component
             for item in data_provider[type_key]:
                 with self.subTest(item['iso']):
-                    d = Parse.iso_string(item["iso"])
+                    d = Parse.iso_to_iso_dict(item["iso"])
                     actual = d["components"]["tz"]
                     expected = item["expected"]["components"]["tz"]
                     self.assertTrue(ValidateDict.validate_tz_dict(actual))

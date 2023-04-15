@@ -1,6 +1,6 @@
 from typing import TypedDict, NotRequired
-from components.parsers.iso_strings.utilities import Utilities
-from tests_src.components.parsers.iso_strings.tests_parse_iso_string_base \
+from components.utilities import Utilities
+from tests_src.components.parsers.tests_parse_iso_string_base \
     import TestsParseIsoStringBase
 
 
