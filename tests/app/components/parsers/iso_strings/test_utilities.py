@@ -1,5 +1,5 @@
 from typing import TypedDict, NotRequired
-from routes.encode.components.parsers.iso_strings.utilities import Utilities
+from components.parsers.iso_strings.utilities import Utilities
 from app.components.parsers.iso_strings.parse_iso_string_base import ParseIsoStringBase
 
 

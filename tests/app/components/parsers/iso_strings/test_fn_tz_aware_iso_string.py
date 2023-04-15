@@ -1,6 +1,6 @@
 import unittest
 from app.components.parsers.iso_strings.parse_iso_string_base import ParseIsoStringBase
-from routes.encode.components.parsers.iso_strings.parse_iso_strings import Parse
+from components.parsers.iso_strings.parse_iso_strings import Parse
 from type_ext.validators import ValidateDict
 from type_ext import DateDict
 
