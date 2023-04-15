@@ -1,6 +1,7 @@
 from typing import TypedDict, NotRequired
 from components.parsers.iso_strings.utilities import Utilities
-from tests_src.components.parsers.iso_strings.parse_iso_string_base import ParseIsoStringBase
+from tests_src.components.parsers.iso_strings.tests_parse_iso_string_base \
+    import TestsParseIsoStringBase
 
 
 class ArgDict(TypedDict):
@@ -17,7 +18,7 @@ class ArgDict(TypedDict):
     generate_couplet: int
 
 
-class TestUtilities(ParseIsoStringBase):
+class TestUtilities(TestsParseIsoStringBase):
 
     def setUp(self) -> None:
         super().setUp()
