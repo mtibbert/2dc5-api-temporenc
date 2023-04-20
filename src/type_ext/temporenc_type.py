@@ -1,3 +1,4 @@
+import typing
 from enum import Flag
 from typing import List
 
@@ -34,6 +35,24 @@ class TemporencType(Flag):
         """
         return [cls.TYPE_DTZ, cls.TYPE_DTSZ]
 
+    @classmethod
+    def list_encoding_types(cls) -> List[str]:
+        l: List[str] = [member.as_encoding_type()
+                        for name, member in TemporencType.__members__.items()]
+        return l
+
+    def as_encoding_type(self) -> str:
+        """
+        Cast instance to corresponding Temporenc encoding string.
+
+        :return: {str}
+
+        >>> TemporencType.TYPE_DT.as_encoding_type() == "DT"
+        True
+
+        """
+        return self.name.replace("TYPE_", "")
+
     def is_precise(self) -> bool:
         """
         Returns True if TemporencType member contains a sub-second
@@ -50,3 +69,7 @@ class TemporencType(Flag):
         :return: bool
         """
         return self in self.tz_aware_list()
+
+
+# TemporencEncodingType = typing.TypeVar('TemporencEncodingType', bound=TemporencType)
+
