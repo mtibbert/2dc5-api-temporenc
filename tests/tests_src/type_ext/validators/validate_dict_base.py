@@ -50,13 +50,12 @@ class ValidateDictBase(TestCase):
                 ]},
             "precision_dict": {
                 "pass": [
-                    {"precision": "PRECISION_MICROSECOND", "subsecond": "1"},
-                    {"precision": "PRECISION_MICROSECOND", "subsecond": "12"},
-                    {"precision": "PRECISION_MICROSECOND", "subsecond": "123"},
+                    {"precision": "PRECISION_MILLISECOND", "subsecond": "1"},
+                    {"precision": "PRECISION_MILLISECOND", "subsecond": "12"},
                     {"precision": "PRECISION_MILLISECOND", "subsecond": "123"},
-                    {"precision": "PRECISION_MILLISECOND", "subsecond": "1234"},
-                    {"precision": "PRECISION_MILLISECOND", "subsecond": "12345"},
-                    {"precision": "PRECISION_MILLISECOND", "subsecond": "123456"},
+                    {"precision": "PRECISION_MICROSECOND", "subsecond": "1234"},
+                    {"precision": "PRECISION_MICROSECOND", "subsecond": "12345"},
+                    {"precision": "PRECISION_MICROSECOND", "subsecond": "123456"},
                     {"precision": "PRECISION_NANOSECOND", "subsecond": "1234567"},
                     {"precision": "PRECISION_NANOSECOND", "subsecond": "12345678"},
                     {"precision": "PRECISION_NANOSECOND", "subsecond": "123456789"},
@@ -66,7 +65,7 @@ class ValidateDictBase(TestCase):
                 "fail": [
                     {"precision": "foo", "subsecond": "123456"},
                     {"precision": "PRECISION_MICROSECOND", "subsecond": None},
-                    {"precision": "PRECISION_MICROSECOND", "subsecond": "1234"},
+                    {"precision": "PRECISION_MICROSECOND", "subsecond": "123"},
                     {"precision": "PRECISION_NANOSECOND", "subsecond": "1234567891"},
                 ]
             },

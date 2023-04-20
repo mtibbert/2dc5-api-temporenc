@@ -64,12 +64,12 @@ class ValidateDict:
                 is_valid = precision_dict["subsecond"] is None
             elif precision_dict["subsecond"] is not None:
                 match precision_name:
-                    case PrecisionType.PRECISION_MICROSECOND.name:
-                        is_valid = len(precision_dict["subsecond"]) <= 3
                     case PrecisionType.PRECISION_MILLISECOND.name:
-                        is_valid = len(precision_dict["subsecond"]) <= 6
+                        is_valid = len(precision_dict["subsecond"]) <= 3
+                    case PrecisionType.PRECISION_MICROSECOND.name:
+                        is_valid = (3 < len(precision_dict["subsecond"]) <= 6)
                     case PrecisionType.PRECISION_NANOSECOND.name:
-                        is_valid = len(precision_dict["subsecond"]) <= 9
+                        is_valid = (6 < len(precision_dict["subsecond"]) <= 9)
                     case _:
                         is_valid = False
             else:
