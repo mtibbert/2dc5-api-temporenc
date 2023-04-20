@@ -1,4 +1,3 @@
-import typing
 from enum import Flag
 from typing import List
 
@@ -69,7 +68,3 @@ class TemporencType(Flag):
         :return: bool
         """
         return self in self.tz_aware_list()
-
-
-# TemporencEncodingType = typing.TypeVar('TemporencEncodingType', bound=TemporencType)
-
