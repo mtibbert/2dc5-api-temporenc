@@ -4,7 +4,7 @@ from components.temporenc import Utilities
 from type_ext import IsoDict
 
 
-class TestUtilities(TestCase):
+class TestFnIsoDictAsIsoStr(TestCase):
 
     data_provider = {}
 
@@ -35,7 +35,7 @@ class TestUtilities(TestCase):
                               data["TYPE_DT"] + data["TYPE_DTS"] + data["TYPE_DTZ"] +
                               data["TYPE_DTS"])
 
-    def test_encode_iso_dict_as_iso_str_returns_expected_value(self):
+    def test_fn_iso_dict_as_iso_str_returns_expected_value(self):
         for item in self.data_provider:
             expected = item["iso"]
             iso_dict: IsoDict = Parse.iso_to_iso_dict(expected)
