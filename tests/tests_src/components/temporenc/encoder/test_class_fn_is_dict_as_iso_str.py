@@ -1,8 +1,7 @@
 from unittest import TestCase
 from components.parsers.parse_iso_strings import Parse
-from components.temporenc import Encoder, Utilities
+from components.temporenc import Utilities
 from type_ext import IsoDict
-from type_ext.temporenc_arg_dict import TemporencArgDict
 
 
 class TestUtilities(TestCase):
