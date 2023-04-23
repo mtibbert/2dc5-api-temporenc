@@ -1,10 +1,10 @@
 from temporenc import temporenc
-
 from type_ext.temporenc_arg_dict import TemporencArgDict
 
 
 class Encoder:
 
+    # TODO: NEXT - encode_iso_str
     @classmethod
     def encode_arg_dict(cls, arg_dict: TemporencArgDict) -> str:
         """
@@ -14,15 +14,15 @@ class Encoder:
 
         :return: {str} an uppercase hexadecimal string.
         """
-        if (arg_dict["microsecond"] is not None and
-                arg_dict["millisecond"] is not None):
-            pass
-        if (arg_dict["microsecond"] is not None and
-                arg_dict["nanosecond"] is not None):
-            pass
-        if (arg_dict["millisecond"] is not None and
-                arg_dict["nanosecond"] is not None):
-            pass
+        # Prefer greater precision
+        if ((arg_dict["millisecond"] is not None and
+             arg_dict["microsecond"] is not None) or
+                (arg_dict["millisecond"] is not None and
+                 arg_dict["nanosecond"] is not None)):
+            arg_dict["millisecond"] = None
+        if arg_dict["tz_offset"] is not None:
+            arg_dict["hour"] += int(arg_dict["tz_offset"] / 60)
+            arg_dict["minute"] += arg_dict["tz_offset"] % 60
         hex_str = temporenc.packb(
             value=arg_dict["value"],
             type=arg_dict["type"],

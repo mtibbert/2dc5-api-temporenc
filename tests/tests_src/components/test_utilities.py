@@ -37,7 +37,7 @@ class TestUtilities(TestsParseIsoStringBase):
         # ... "seconds_start": 5, "generate_couplet": 2 }
         # >>> expected =\
         # arg["generate_hours"]*arg["generate_minutes"]*arg["generate_couplet"]
-        # >>> len(TestUtilities.generate_time_strings(arg)) == expected
+        # >>> len(TestFnIsoDictAsIsoStr.generate_time_strings(arg)) == expected
         # True
 
         """
