@@ -1,7 +1,33 @@
+import re
 from datetime import date, time
 
 
 class Utilities:
+
+    @classmethod
+    def normalize_iso_str(cls, iso_str: str) -> str:
+        """
+        Normalizes ISO strings by removing trailing precision zeros.
+
+        :param iso_str: {str}
+        :return: {str}
+
+        >>> u = Utilities
+        >>> u.normalize_iso_str('1983-01-15T18:25:12.120') == '1983-01-15T18:25:12.12'
+        True
+        """
+        normalized_iso = iso_str
+        parts = iso_str.split(".")
+        if len(parts) == 2:
+            regex = r"([1-9]{1,9})(0{1,89})([+-]*?)"
+            subst = "\\g<1>"
+            result = re.sub(regex, subst, parts[1], 0)
+            if result and int(result) > 0:
+                normalized_iso = f'{parts[0]}.{result}'
+            elif result:
+                # Remove precision when ISO in form of "1983-01-15T18:25:12.0"
+                normalized_iso = f'{parts[0]}'
+        return normalized_iso
 
     @classmethod
     def is_iso_time_str(cls, str_2_evaluate: str) -> bool:

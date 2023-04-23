@@ -75,6 +75,40 @@ class TestUtilities(TestsParseIsoStringBase):
                                     f'{str(s%60).zfill(2)}')
         return ret_list
 
+    def test_normalize_iso_str_returns_str(self):
+        self.assertIsInstance(Utilities.normalize_iso_str("1983-01-15T18:25:12.10"), str)
+
+    def test_normalize_iso_str(self):
+        data_provider = [
+            {"actual": "1983-01-15T18:25:12.0",
+             "expected": "1983-01-15T18:25:12"},
+            {"actual": "1983-01-15T18:25:12.10",
+             "expected": "1983-01-15T18:25:12.1"},
+            {"actual": "1983-01-15T18:25:12.120",
+             "expected": "1983-01-15T18:25:12.12"},
+            {"actual": "1983-01-15T18:25:12.123",
+             "expected": "1983-01-15T18:25:12.123"},
+            {"actual": "1983-01-15T18:25:12.1230",
+             "expected": "1983-01-15T18:25:12.123"},
+            {"actual": "1983-01-15T18:25:12.123400",
+             "expected": "1983-01-15T18:25:12.1234"},
+            {"actual": "1983-01-15T18:25:12.123450",
+             "expected": "1983-01-15T18:25:12.12345"},
+            {"actual": "1983-01-15T18:25:12.123456",
+             "expected": "1983-01-15T18:25:12.123456"},
+            {"actual": "1983-01-15T18:25:12.123456700",
+             "expected": "1983-01-15T18:25:12.1234567"},
+            {"actual": "1983-01-15T18:25:12.123456780",
+             "expected": "1983-01-15T18:25:12.12345678"},
+            {"actual": "1983-01-15T18:25:12.123456789",
+             "expected": "1983-01-15T18:25:12.123456789"},
+            {"actual": "1983-01-15T18:25:12.01",
+             "expected": "1983-01-15T18:25:12.01"}]
+        for item in data_provider:
+            with self.subTest(f'{item["actual"]} is {item["expected"]}'):
+                self.assertEqual(item["expected"],
+                                 Utilities.normalize_iso_str(item["actual"]))
+
     def test_is_iso_time_str_true_for_valid_strings(self):
         args: ArgDict = {
             "count": 0,
