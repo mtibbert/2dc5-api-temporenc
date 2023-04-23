@@ -263,9 +263,9 @@ class Parse:
             dict_obj["subsecond"] = normalized_precision
             chars = len(dict_obj["subsecond"])
             if chars < 4:
-                dict_obj["precision"] = str(PrecisionType.PRECISION_MICROSECOND.name)
-            elif chars < 7:
                 dict_obj["precision"] = str(PrecisionType.PRECISION_MILLISECOND.name)
+            elif chars < 7:
+                dict_obj["precision"] = str(PrecisionType.PRECISION_MICROSECOND.name)
             else:
                 dict_obj["precision"] = str(PrecisionType.PRECISION_NANOSECOND.name)
         return dict_obj

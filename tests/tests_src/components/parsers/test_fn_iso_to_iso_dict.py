@@ -40,7 +40,7 @@ class TestTestsParseTzAwareStr(TestsParseIsoStringBase):
                     self.assertTrue(ValidateDict.validate_precision_dict(actual))
                     self.assertListEqual(list(expected.keys()), list(actual.keys()))
                     self.assertEqual(expected["subsecond"], actual["subsecond"])
-                    self.assertEqual(expected["subsecond"], actual["subsecond"])
+                    self.assertEqual(expected["precision"], actual["precision"])
 
     def test_component_time(self):
         dp_keys = self.data_provider.keys()

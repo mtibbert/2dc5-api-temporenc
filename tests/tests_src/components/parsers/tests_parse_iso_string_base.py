@@ -119,7 +119,7 @@ class TestsParseIsoStringBase(unittest.TestCase):
                              "day": "15",
                          },
                          "precision": {
-                             "precision": "PRECISION_MICROSECOND",
+                             "precision": "PRECISION_MILLISECOND",
                              "subsecond": "123"
 
                          },
@@ -150,7 +150,7 @@ class TestsParseIsoStringBase(unittest.TestCase):
                              "day": "15",
                          },
                          "precision": {
-                             "precision": "PRECISION_MILLISECOND",
+                             "precision": "PRECISION_MICROSECOND",
                              "subsecond": "123456"
 
                          },
@@ -340,7 +340,7 @@ class TestsParseIsoStringBase(unittest.TestCase):
                              "day": "15",
                          },
                          "precision": {
-                             "precision": "PRECISION_MICROSECOND",
+                             "precision": "PRECISION_MILLISECOND",
                              "subsecond": "123"
 
                          },
@@ -371,7 +371,7 @@ class TestsParseIsoStringBase(unittest.TestCase):
                              "day": "15",
                          },
                          "precision": {
-                             "precision": "PRECISION_MILLISECOND",
+                             "precision": "PRECISION_MICROSECOND",
                              "subsecond": "123456"
 
                          },
@@ -462,7 +462,7 @@ class TestsParseIsoStringBase(unittest.TestCase):
                 "date": {
                     "year": "1983", "month": "01", "day": "15"},
                 "precision": {
-                    "precision": "PRECISION_MILLISECOND",
+                    "precision": "PRECISION_MICROSECOND",
                     "subsecond": "123456"},
                 "time": {
                     "hour": "18", "minute": "25", "second": "12"},
