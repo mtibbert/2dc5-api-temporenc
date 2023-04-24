@@ -85,6 +85,7 @@ class Utilities:
         Normalizes ISO strings by removing trailing precision zeros.
 
         :param iso_str: {str}
+
         :return: {str}
 
         >>> u = Utilities
@@ -97,7 +98,7 @@ class Utilities:
             regex = r"([1-9]{1,9})(0{1,89})([+-]*?)"
             subst = "\\g<1>"
             result = re.sub(regex, subst, parts[1], 0)
-            if result and int(result) > 0:
+            if result and int(re.split(r'\W+', result, 1)[0]) > 0:
                 normalized_iso = f'{parts[0]}.{result}'
             elif result:
                 # Remove precision when ISO in form of "1983-01-15T18:25:12.0"
@@ -112,7 +113,7 @@ class Utilities:
         """
         Parse Date, Time, Datetime like arguments into an ISO string format.
 
-        Note: No validation of the resulting string occurs. 
+        Note: No validation of the resulting string occurs.
 
         :param year: {int} Default is None
         :param month:  {int} Default is None
@@ -122,7 +123,14 @@ class Utilities:
         :param second:  {int} Default is None
         :param precision:  {int} Default is None
         :param tz_offset:  {int} Default is None
+
         :return: {str}
+
+        >>> u = Utilities
+        >>> expected = '1983-01-15T18:25:12.123+01:00'
+        >>> u.packb_args_to_iso(1983, 1, 15, 18, 25,12, 123, 60) == expected
+        True
+
         """
         tz_sfx = ""
 
