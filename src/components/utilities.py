@@ -1,3 +1,4 @@
+import datetime
 import re
 from datetime import date, time
 
@@ -14,6 +15,8 @@ class Utilities:
         :return: {bool} True if string parses to a Date object; else False.
 
         >>> Utilities.is_iso_date_str("1983-01-15") == True
+        True
+        >>> Utilities.is_iso_date_str("1983-01-15T18:25:12") == False
         True
         >>> Utilities.is_iso_date_str("19830229") == False
         True
@@ -36,6 +39,40 @@ class Utilities:
                     parts[0] = -1  # Invalid results, force ValueError
             try:
                 ret_val = date(parts[0], parts[1], parts[2]) is not None
+            except ValueError:
+                ret_val = False
+
+        return ret_val
+
+    @classmethod
+    def is_iso_datetime_str(cls, str_2_evaluate: str) -> bool:
+        """
+        Evaluate if string parses to a Datetime object. The minimal form of the
+        evaluated string should be YYYY-MM-DDTHH:MM:SS. Precision and time zone
+        information is optional; although if provided must be correct.
+
+        :param str_2_evaluate:
+
+        :return: {bool} True if string parses to a Datetime object; else False.
+
+        >>> u = Utilities
+        >>> u.is_iso_datetime_str("1983-01-15T18:25") == False
+        True
+        >>> u.is_iso_datetime_str("1983-01-15T18:25:12") == True
+        True
+        >>> u.is_iso_datetime_str("1983-01-15T18:25:12.123") == True
+        True
+        >>> u.is_iso_datetime_str("1983-01-15T18:25:12-01:00") == True
+        True
+        >>> u.is_iso_datetime_str("1983-01-15T18:25:12.123-01:00") == True
+        True
+
+        """
+        ret_val = False
+
+        if len(str_2_evaluate) >= len("YYYY-MM-DDTHH:MM:SS"):
+            try:
+                ret_val = datetime.datetime.fromisoformat(str_2_evaluate) is not None
             except ValueError:
                 ret_val = False
 

@@ -75,6 +75,15 @@ class TestUtilities(TestsParseIsoStringBase):
                                     f'{str(s%60).zfill(2)}')
         return ret_list
 
+    def test_is_iso_datetime_str_returns_true_for_datetime_str(self):
+        data_provider = ["1983-01-15T18:25:12",
+                         "1983-01-15T18:25:12.123",
+                         "1983-01-15T18:25:12+01:00",
+                         "1983-01-15T18:25:12.123-01:00"]
+        for iso_str in data_provider:
+            with self.subTest(f'is_iso_datetime_str({iso_str}) is True'):
+                self.assertTrue(Utilities.is_iso_datetime_str(iso_str))
+
     def test_is_iso_time_str_true_for_valid_strings(self):
         args: ArgDict = {
             "count": 0,
