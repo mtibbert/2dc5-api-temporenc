@@ -1,3 +1,4 @@
+from datetime import time
 from typing import TypedDict, NotRequired
 from components.utilities import Utilities
 from tests_src.components.parsers.tests_parse_iso_string_base \
@@ -220,3 +221,21 @@ class TestUtilities(TestsParseIsoStringBase):
                     precision=item["actual"]["precision"],
                     tz_offset=item["actual"]["tz_offset"])
                 self.assertEqual(item["expected"], actual)
+
+    def test_time_str_to_time_obj_returns_time_obj(self):
+        dp = [
+            {"iso": "18",
+             "time_obj": time(18, 0, 0)},
+            {"iso": "18:25",
+             "time_obj": time(18, 25, 0)},
+            {"iso": "18:25:12",
+             "time_obj": time(18, 25, 12)},
+            {"iso": "T18:25:12",
+             "time_obj": time(18, 25, 12)}]
+        for item in dp:
+            expected = item["time_obj"]
+            actual = Utilities.time_str_to_time_obj(item["iso"])
+            with self.subTest(f'"{item["iso"]}" returns the time instance ' +
+                              f'{actual.isoformat()}'):
+                self.assertIsInstance(actual, time)
+                self.assertEqual(expected, actual)

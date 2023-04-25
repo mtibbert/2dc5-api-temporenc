@@ -26,7 +26,7 @@ class Utilities:
         """
         ret_val = False
 
-        if len(str_2_evaluate) <= len("YYYY-MM-DD"):
+        if len(str_2_evaluate) <= len("YYYY-MM-DD") and ":" not in str_2_evaluate:
             parts = [int(x) for x in str_2_evaluate.split("-")]
             match len(parts):
                 case 3:
@@ -192,3 +192,10 @@ class Utilities:
         elif time_str != "":      # Type D, DT, DTS, DTZ, or DTSZ
             iso += f'T{time_str}{precision}{tz_sfx}'
         return iso
+
+    @classmethod
+    def time_str_to_time_obj(cls, time_str: str) -> time:
+        time_ret = None
+        if cls.is_iso_time_str(time_str):
+            time_ret = datetime.time.fromisoformat(time_str)
+        return time_ret
