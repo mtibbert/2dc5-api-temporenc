@@ -6,8 +6,6 @@ from components.utilities import Utilities
 
 class Encoder:
 
-    # TODO: Encode ISO String #26
-
     @classmethod
     def encode_by_args(cls, year: int = None, month: int = None, day: int = None,
                        hour: int = None, minute: int = None, second: int = None,
@@ -41,17 +39,6 @@ class Encoder:
         :return: {str} a six (6) character uppercase hexadecimal string.
         """
         return temporenc.packb(value=date_obj, type="D").hex().upper()
-
-    @classmethod
-    def encode_iso_time(cls, time_obj: datetime.time):
-        """
-        Encode time object as an uppercase hexadecimal string.
-
-        :param time_obj: {datetime.time}
-
-        :return: {str} a six (6) character uppercase hexadecimal string.
-        """
-        return temporenc.packb(value=time_obj, type="T").hex().upper()
 
     @classmethod
     def encode_iso_dto(cls, dto: datetime, encode_to_type: str = None):
@@ -93,3 +80,32 @@ class Encoder:
         else:
             encoded = temporenc.packb(value=dto, type=encode_to_type).hex().upper()
         return encoded
+
+    @classmethod
+    def encode_iso_str(cls, iso_str: str, encode_to_type: str = None) -> str:
+        encoded = None
+        if Utilities.is_iso_datetime_str(iso_str):
+            encoded = cls.encode_iso_dto(
+                dto=datetime.fromisoformat(iso_str),
+                encode_to_type=encode_to_type)
+        elif (Utilities.is_iso_date_str(iso_str)
+                and not Utilities.is_iso_datetime_str(iso_str)):
+            encoded = cls.encode_iso_dto(
+                dto=datetime.fromisoformat(iso_str),
+                encode_to_type="D")
+        elif (Utilities.is_iso_time_str(iso_str)
+                and not Utilities.is_iso_datetime_str(iso_str)):
+            encoded = cls.encode_iso_time(
+                Utilities.time_str_to_time_obj(iso_str))
+        return encoded
+
+    @classmethod
+    def encode_iso_time(cls, time_obj: datetime.time):
+        """
+        Encode time object as an uppercase hexadecimal string.
+
+        :param time_obj: {datetime.time}
+
+        :return: {str} a six (6) character uppercase hexadecimal string.
+        """
+        return temporenc.packb(value=time_obj, type="T").hex().upper()

@@ -38,7 +38,7 @@ class TestEncoder(TestCase):
         self.dp_elemental_types = data["TYPE_D"] + data["TYPE_T"]
         self.data_provider = self.dp_complex_types + self.dp_elemental_types
 
-    def test_encode_by_args_for_compound_types(self):
+    def test_encode_by_args_complex_types(self):
         for item in self.dp_complex_types:
             expected = item["encoded"]
             iso_str = item["iso"]
@@ -78,6 +78,35 @@ class TestEncoder(TestCase):
                 expected = item["encoded"]
                 actual = Encoder.encode_iso_date(
                     datetime.date.fromisoformat(item["iso"]))
+                with self.subTest(f'{item["iso"]} encodes to {actual}'):
+                    self.assertIsInstance(actual, str)
+                    self.assertEqual(actual.upper(), actual)
+                    self.assertEqual(expected, actual)
+
+    def test_encode_iso_str_encodes_complex_types(self):
+        for item in self.dp_complex_types:
+            expected = item["encoded"]
+            actual = Encoder.encode_iso_str(item["iso"])
+            with self.subTest(f'{item["iso"]} encodes to {actual}'):
+                self.assertIsInstance(actual, str)
+                self.assertEqual(actual.upper(), actual)
+                self.assertEqual(expected, actual)
+
+    def test_encode_iso_str_encodes_type_d(self):
+        for item in self.dp_elemental_types:
+            if "-" in item["iso"] or len(item["iso"]) == 4:  # Cover year only
+                expected = item["encoded"]
+                actual = Encoder.encode_iso_str(item["iso"])
+                with self.subTest(f'{item["iso"]} encodes to {actual}'):
+                    self.assertIsInstance(actual, str)
+                    self.assertEqual(actual.upper(), actual)
+                    self.assertEqual(expected, actual)
+
+    def test_encode_iso_str_encodes_type_t(self):
+        for item in self.dp_elemental_types:
+            if ":" in item["iso"] or len(item["iso"]) == 3:  # Cover THH use
+                expected = item["encoded"]
+                actual = Encoder.encode_iso_time(datetime.time.fromisoformat(item["iso"]))
                 with self.subTest(f'{item["iso"]} encodes to {actual}'):
                     self.assertIsInstance(actual, str)
                     self.assertEqual(actual.upper(), actual)
