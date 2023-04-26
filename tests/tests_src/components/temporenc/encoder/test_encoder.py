@@ -15,6 +15,7 @@ class TestEncoder(TestsEncoderBase):
         for item in self.dp_complex_types:
             expected = item["encoded"]
             iso_str = item["iso"]
+            # TODO: #28 Create Utilities.iso_str_to_arg_dict() fn
             iso_dict: IsoDict = Parse.iso_to_iso_dict(iso_str)
             arg_dict: TemporencArgDict = Utilities.iso_dict_to_arg_dict(iso_dict)
             precision = (arg_dict["nanosecond"] or
@@ -31,6 +32,7 @@ class TestEncoder(TestsEncoderBase):
     def test_encode_by_args_returns_uppercase_str(self):
         for item in self.dp_complex_types:
             iso_str = item["iso"]
+            # TODO: #28 Create Utilities.iso_str_to_arg_dict() fn
             iso_dict: IsoDict = Parse.iso_to_iso_dict(iso_str)
             arg_dict: TemporencArgDict = Utilities.iso_dict_to_arg_dict(iso_dict)
             precision = (arg_dict["nanosecond"] or
