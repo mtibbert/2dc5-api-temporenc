@@ -28,30 +28,15 @@ class Parse:
     @classmethod
     def extract_date_str(cls, iso_str: str) -> str:
         """
-        Extract and return an ISO time string from provided string.
+        Extract and return an ISO date string from provided string.
 
         :param iso_str: {str} string to search
-        :return: {str} the time string if found, else an empty string is returned.
+        :return:        {str} the date string if found, else an empty string.
 
-        # >>> Parse.extract_time_str("18:25:12") == "18:25:12"
-        # True
-        # >>> Parse.extract_time_str("18:25:12") == "18:25:12"
-        # True
-        # >>> Parse.extract_time_str("T18:25:12") == "18:25:12"
-        # True
-        # >>> Parse.extract_time_str("1983-01-15T18:25:12") == "18:25:12"
-        # True
-        # >>> Parse.extract_time_str("1983-01-15T18:25:12.123") == "18:25:12"
-        # True
-        # >>> Parse.extract_time_str("1983-01-15T18:25:12+01:00") == "18:25:12"
-        # True
-        # >>> Parse.extract_time_str("1983-01-15T18:25:12.123+01:00") == "18:25:12"
+        >>> Parse.extract_date_str("1983-01-15T18:25:12") == "1983-01-15"
         True
-
-        # >>> Parse.extract_time_str(items[1]) == items[0]
-        # True
-        # >>> Parse.extract_time_str(items[2]) == items[0]
-        # True
+        >>> Parse.extract_date_str("18:25:12") == ""
+        True
 
         """
         found_str = ""
@@ -94,25 +79,20 @@ class Parse:
         :param iso_str: {str} string to search
         :return: {str} the time string if found, else an empty string is returned.
 
-        # >>> Parse.extract_time_str("18:25:12") == "18:25:12"
-        # True
-        # >>> Parse.extract_time_str("18:25:12") == "18:25:12"
-        # True
-        # >>> Parse.extract_time_str("T18:25:12") == "18:25:12"
-        # True
-        # >>> Parse.extract_time_str("1983-01-15T18:25:12") == "18:25:12"
-        # True
-        # >>> Parse.extract_time_str("1983-01-15T18:25:12.123") == "18:25:12"
-        # True
-        # >>> Parse.extract_time_str("1983-01-15T18:25:12+01:00") == "18:25:12"
-        # True
-        # >>> Parse.extract_time_str("1983-01-15T18:25:12.123+01:00") == "18:25:12"
+        >>> Parse.extract_time_str("18:25:12") == "18:25:12"
         True
-
-        # >>> Parse.extract_time_str(items[1]) == items[0]
-        # True
-        # >>> Parse.extract_time_str(items[2]) == items[0]
-        # True
+        >>> Parse.extract_time_str("18:25:12") == "18:25:12"
+        True
+        >>> Parse.extract_time_str("T18:25:12") == "18:25:12"
+        True
+        >>> Parse.extract_time_str("1983-01-15T18:25:12") == "18:25:12"
+        True
+        >>> Parse.extract_time_str("1983-01-15T18:25:12.123") == "18:25:12"
+        True
+        >>> Parse.extract_time_str("1983-01-15T18:25:12+01:00") == "18:25:12"
+        True
+        >>> Parse.extract_time_str("1983-01-15T18:25:12.123+01:00") == "18:25:12"
+        True
 
         """
         found_str = ""
@@ -125,30 +105,16 @@ class Parse:
     @classmethod
     def extract_tz_str(cls, iso_str: str) -> str:
         """
-        Extract and return an ISO time string from provided string.
+        Extract and return time zone info string from provided string.
 
         :param iso_str: {str} string to search
-        :return: {str} the time string if found, else an empty string is returned.
+        :return:        {str} the time zone info if found,
+                              else an empty string is returned.
 
-        # >>> Parse.extract_time_str("18:25:12") == "18:25:12"
-        # True
-        # >>> Parse.extract_time_str("18:25:12") == "18:25:12"
-        # True
-        # >>> Parse.extract_time_str("T18:25:12") == "18:25:12"
-        # True
-        # >>> Parse.extract_time_str("1983-01-15T18:25:12") == "18:25:12"
-        # True
-        # >>> Parse.extract_time_str("1983-01-15T18:25:12.123") == "18:25:12"
-        # True
-        # >>> Parse.extract_time_str("1983-01-15T18:25:12+01:00") == "18:25:12"
-        # True
-        # >>> Parse.extract_time_str("1983-01-15T18:25:12.123+01:00") == "18:25:12"
+        >>> Parse.extract_tz_str("1983-01-15T18:25:12+01:00") == "+01:00"
         True
-
-        # >>> Parse.extract_time_str(items[1]) == items[0]
-        # True
-        # >>> Parse.extract_time_str(items[2]) == items[0]
-        # True
+        >>> Parse.extract_tz_str("1983-01-15T18:25:12-01:00") == "-01:00"
+        True
 
         """
         found_str = ""
