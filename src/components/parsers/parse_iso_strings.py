@@ -65,30 +65,18 @@ class Parse:
     @classmethod
     def extract_precision_str(cls, iso_str: str) -> str:
         """
-        Extract and return an ISO time string from provided string.
+        Extract and return precision portion from provided ISO string.
 
         :param iso_str: {str} string to search
-        :return: {str} the time string if found, else an empty string is returned.
 
-        # >>> Parse.extract_time_str("18:25:12") == "18:25:12"
-        # True
-        # >>> Parse.extract_time_str("18:25:12") == "18:25:12"
-        # True
-        # >>> Parse.extract_time_str("T18:25:12") == "18:25:12"
-        # True
-        # >>> Parse.extract_time_str("1983-01-15T18:25:12") == "18:25:12"
-        # True
-        # >>> Parse.extract_time_str("1983-01-15T18:25:12.123") == "18:25:12"
-        # True
-        # >>> Parse.extract_time_str("1983-01-15T18:25:12+01:00") == "18:25:12"
-        # True
-        # >>> Parse.extract_time_str("1983-01-15T18:25:12.123+01:00") == "18:25:12"
+        :return:        {str} the precision portion if found,
+                              else an empty string is returned.
+
+        >>> Parse.extract_precision_str("1983-01-15T18:25:12.123") == "123"
         True
 
-        # >>> Parse.extract_time_str(items[1]) == items[0]
-        # True
-        # >>> Parse.extract_time_str(items[2]) == items[0]
-        # True
+        >>> Parse.extract_precision_str("1983-01-15T18:25:12") == ""
+        True
 
         """
         found_str = ""
