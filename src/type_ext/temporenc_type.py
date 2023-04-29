@@ -102,6 +102,39 @@ class TemporencType(Flag):
         return [cls.TYPE_DTS, cls.TYPE_DTSZ]
 
     @classmethod
+    def type_of(cls, encoded: str) -> "TemporencType":
+        """
+        Return TemporencType of the encoded string.
+
+        NOTE: The candidate string is not validated.
+
+        Returns: {TemporencType | None:} returns the TemporencType found
+        """
+
+        # noinspection PyUnusedLocal
+        return_member = None
+
+        bin_str = bin(int(encoded, 16))[2:]
+        # Add leading zeros for types DT and DTS
+        pad = "0000"[0:(4-(len(bin_str) % 4))] if (len(bin_str) % 4) > 0 else ""
+        candidate = f'{pad}{bin_str}'
+
+        match candidate[:3]:
+            case "100":
+                return_member = TemporencType.TYPE_D
+            case "101":
+                return_member = TemporencType.TYPE_T
+            case "110":
+                return_member = TemporencType.TYPE_DTZ
+            case "111":
+                return_member = TemporencType.TYPE_DTSZ
+            case _:
+                return_member = TemporencType.TYPE_DT \
+                    if candidate[:2] == "00" else TemporencType.TYPE_DTS
+
+        return return_member
+
+    @classmethod
     def tz_aware_list(cls) -> List["TemporencType"]:
         """
         Return a list of TemporencType members that are timezone aware.
