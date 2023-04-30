@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 
-class TestsEncoderBase(TestCase):
+class TestsBase(TestCase):
 
     data_provider = {}
 
