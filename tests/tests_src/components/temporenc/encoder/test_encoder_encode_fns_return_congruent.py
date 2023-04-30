@@ -1,10 +1,10 @@
-from tests_src.components.temporenc.encoder.tests_encoder_base import TestsEncoderBase
+from tests_src.components.temporenc.tests_base import TestsBase
 from components.temporenc import Encoder, Utilities
 from components.parsers import Parse
 import datetime
 
 
-class TestEncoderEncodeFnsReturnCongruent(TestsEncoderBase):
+class TestEncoderEncodeFnsReturnCongruent(TestsBase):
 
     def setUp(self) -> None:
         super().setUp()

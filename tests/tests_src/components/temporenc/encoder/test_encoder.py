@@ -1,4 +1,4 @@
-from tests_src.components.temporenc.encoder.tests_encoder_base import TestsEncoderBase
+from tests_src.components.temporenc.tests_base import TestsBase
 from components.parsers.parse_iso_strings import Parse
 from components.temporenc import Encoder, Utilities
 from type_ext import IsoDict
@@ -6,7 +6,7 @@ from type_ext.temporenc_arg_dict import TemporencArgDict
 import datetime
 
 
-class TestEncoder(TestsEncoderBase):
+class TestEncoder(TestsBase):
 
     def setUp(self) -> None:
         super().setUp()
