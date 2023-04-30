@@ -48,3 +48,56 @@ class PrecisionType(Flag):
                     precision_type = PrecisionType.PRECISION_NANOSECOND
 
         return precision_type
+
+    def pad(self) -> str:
+        """
+        Retrieve the encoding precision padding string associated with member.
+        Returned values are in the vocabulary ["", "00", "0000", "000000"].
+
+        :return: {str}
+        """
+        pad_dict = {
+            PrecisionType.PRECISION_MILLISECOND.name: "0000",
+            PrecisionType.PRECISION_MICROSECOND.name: "00",
+            PrecisionType.PRECISION_NANOSECOND.name: "",
+            PrecisionType.PRECISION_NONE.name: "000000"}
+
+        tag = pad_dict[PrecisionType.PRECISION_NANOSECOND.name]
+
+        match self:
+            case PrecisionType.PRECISION_MILLISECOND:
+                tag = "0000"
+            case PrecisionType.PRECISION_MICROSECOND:
+                tag = "00"
+            case PrecisionType.PRECISION_NANOSECOND:
+                tag = ""
+            case PrecisionType.PRECISION_NONE:
+                tag = "000000"
+        return tag
+
+    @classmethod
+    def pad_to_precision_type(cls, pad_str: str) -> "PrecisionType":
+        """
+        Retrieve the PrecisionType member associated with pad_str.
+
+        Note: The padding associated with PRECISION_NANOSECOND and PRECISION_NON_PRECISE
+                   are an empty string (""). Do not rely upon this function as the sole
+                   means of identifying precision granularity.
+
+        :param pad_str: {str}
+
+        :return: {PrecisionType}
+        """
+
+        precision_type = PrecisionType.PRECISION_NANOSECOND
+
+        precision_type_dict = {
+            "0000": PrecisionType.PRECISION_MILLISECOND,
+            "00": PrecisionType.PRECISION_MICROSECOND,
+            "000000": PrecisionType.PRECISION_NONE}
+        if pad_str in precision_type_dict:
+            precision_type = precision_type_dict[pad_str]
+        elif pad_str == "":
+            precision_type = PrecisionType.PRECISION_NANOSECOND
+
+        return precision_type
