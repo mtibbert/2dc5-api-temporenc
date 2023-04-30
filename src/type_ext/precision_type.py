@@ -1,6 +1,7 @@
 import re
 from enum import Flag
 from components.utilities import Utilities
+from type_ext.temporenc_type import TemporencType
 
 
 class PrecisionType(Flag):
@@ -10,6 +11,37 @@ class PrecisionType(Flag):
     PRECISION_MICROSECOND = 4
     PRECISION_MILLISECOND = 8
     PRECISION_NANOSECOND = 16
+
+    @classmethod
+    def encoded_to_precision_type(cls, encoded_str: str) -> "PrecisionType":
+        """
+        Extracts PrecisionType member associated with encoded value.
+
+        NOTE: No validation of encoded_str occurs.
+
+        :param encoded_str: {str}
+
+        :return: PrecisionType
+        """
+
+        member = PrecisionType.PRECISION_NON_PRECISE
+
+        temporenc_type = TemporencType.type_of(encoded_str)
+        precision_tag = ""
+
+        if temporenc_type.is_precise():
+            bin_str = bin(int(encoded_str, 16))[2:]
+            if len(bin_str) % 4 != 0:  # Left pad to multiple of 4
+                bin_str = bin_str.zfill(len(bin_str) + (4 - len(bin_str) % 4))
+            match TemporencType.type_of(encoded_str):
+                case TemporencType.TYPE_DTS:
+                    # 01PPDDDD - DTS
+                    precision_tag = bin_str[2:4]
+                case TemporencType.TYPE_DTSZ:
+                    # 111PPDDD - DTSZ
+                    precision_tag = bin_str[3:5]
+            member = PrecisionType.precision_tag_to_precision_type(precision_tag)
+        return member
 
     def is_precisely_encoded(self) -> bool:
         """
@@ -101,3 +133,43 @@ class PrecisionType(Flag):
             precision_type = PrecisionType.PRECISION_NANOSECOND
 
         return precision_type
+
+    def precision_tag(self) -> str:
+        """
+        Retrieve the encoding precision tag associated with member. Returned values
+        are in the vocabulary ["", "00", "01", "10", "11"].
+
+        :return: {str}
+        """
+        tag = ""
+        match self:
+            case PrecisionType.PRECISION_MILLISECOND:
+                tag = "00"
+            case PrecisionType.PRECISION_MICROSECOND:
+                tag = "01"
+            case PrecisionType.PRECISION_NANOSECOND:
+                tag = "10"
+            case PrecisionType.PRECISION_NONE:
+                tag = "11"
+        return tag
+
+    @classmethod
+    def precision_tag_to_precision_type(cls, precision_tag: str) -> "PrecisionType":
+        """
+        Retrieve the PrecisionType member associated with precision tag.
+
+        :param precision_tag: {str}
+
+        :return: {PrecisionType}
+        """
+        member = PrecisionType.PRECISION_NON_PRECISE
+        match precision_tag:
+            case "00":
+                member = PrecisionType.PRECISION_MILLISECOND
+            case "01":
+                member = PrecisionType.PRECISION_MICROSECOND
+            case "10":
+                member = PrecisionType.PRECISION_NANOSECOND
+            case "11":
+                member = PrecisionType.PRECISION_NONE
+        return member
