@@ -1,3 +1,4 @@
+from components.temporenc import Encoder
 from components.temporenc.decoder import Decoder
 from tests_src.components.temporenc.tests_base import TestsBase
 from type_ext import TemporencType
@@ -8,6 +9,15 @@ class TestDecoder(TestsBase):
 
     def setUp(self) -> None:
         super().setUp()
+
+    def test_compare_as_local(self):
+        data_provider = [
+            [Encoder.encode_iso_str("1983-01-15T18:25:12.123456+01:00"),
+             Encoder.encode_iso_str("1983-01-15T11:25:12.123456-06:00")]]
+        local = f'UTC{datetime.datetime.now().astimezone().isoformat()[-6:]}'
+        for li in data_provider:
+            with self.subTest(f'{li[0]} and {li[1]} are the same at {local}'):
+                self.assertTrue(Decoder.compare_as_local(li[0], li[1]))
 
     def test_decode_fn(self):
         data_provider = self.dp_complex_types + self.dp_elemental_types

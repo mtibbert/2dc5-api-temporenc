@@ -89,6 +89,32 @@ class Decoder:
         return m.time()                        # Return Time portion
 
     @classmethod
+    def compare_as_local(cls, left: str, right: str) -> bool:
+        """
+        Compare two datetime encoded values and determine if they are the same in
+        local time.
+
+        :param left:    {str}  a Type DT, DTS, or DTSZ encoded value
+        :param right:   {str}  a Type DT, DTS, or DTSZ encoded value
+
+        :return:        {bool} True if left and right are the same datetime when
+                               converted to local time.
+
+        >>> enc_cet = "EBDF83A2C983C48110"  # 1983-01-15T18:25:12.123456+01:00
+        >>> enc_cst = "EBDF83A2C983C480A0"  # 1983-01-15T11:25:12.123456-06:00
+        >>> Decoder.compare_as_local(enc_cet, enc_cst) == True
+        True
+        """
+        compares_eq = False
+        if ("S" in TemporencType.type_of(left).name and
+                TemporencType.type_of(left) == TemporencType.type_of(right)):
+            moment_left = temporenc.unpackb(bytes.fromhex(left))
+            moment_right = temporenc.unpackb(bytes.fromhex(right))
+            compares_eq = (moment_left.datetime().astimezone() ==
+                           moment_right.datetime().astimezone())
+        return compares_eq
+
+    @classmethod
     def encoded_is_valid(cls, hex_str: str):
         unpacks = True
         try:
