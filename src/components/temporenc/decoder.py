@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta, timezone, date, time
 from temporenc import temporenc
-from type_ext import TemporencType
+from type_ext.temporenc_type import TemporencType
 
 
 class Decoder:

@@ -23,7 +23,7 @@ class TestEncodeGet(TestsBase):
             results = iso_to_encode_get_response(item["iso"], self.prefix, self.app)
             with self.subTest(f'{self.prefix}{item["iso"]} returns status code '
                               f'{expected}'):
-                self.assertEquals(expected, results.status_code)
+                self.assertEqual(expected, results.status_code)
 
     def test_encodes_iso_correctly(self):
         for item in self.data_provider:
