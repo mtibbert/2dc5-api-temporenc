@@ -1,4 +1,6 @@
-from type_ext import IsoDict, temporenc_arg_dict, PrecisionType
+from type_ext import temporenc_arg_dict
+from type_ext.iso_dict import IsoDict
+from type_ext.precision_type import PrecisionType
 from type_ext.temporenc_arg_dict import TemporencArgDict
 from type_ext.utilities import join_dict_values
 from type_ext.validators import ValidateDict
@@ -59,8 +61,6 @@ class Utilities:
         iso_str = ""
         date_str = ""
         time_str = ""
-        precision_str = ""
-        tz_str = ""
         if ValidateDict.validate_date_dict(iso_dict["components"]["date"]):
             date_str = join_dict_values(iso_dict["components"]["date"])
             iso_str = date_str
