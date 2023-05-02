@@ -21,7 +21,7 @@ def dp_item_encoded_to_actual_expected(item, prefix: str, app):
     precision = PrecisionType.encoded_to_precision_type(item["encoded"]).name
     expected = {"decoded": item["iso"], "encoded": item["encoded"],
                 "precision": precision, "type_ext": type_ext}
-    response = get_response(item["iso"], prefix, app)
+    response = get_response(item["encoded"], prefix, app)
     return {"actual": response.get_json(),
             "expected": expected}
 

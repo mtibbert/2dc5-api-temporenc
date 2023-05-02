@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_restful import Api
 from flask_swagger_ui import get_swaggerui_blueprint
+from src.routes.decode.decode_bp import decode_bp
 from src.routes.encode.encode_bp import encode_bp
 
 # Prefix for routes
@@ -28,5 +29,6 @@ swaggerui_blueprint = get_swaggerui_blueprint(
 )
 
 # Set Endpoints
+app.register_blueprint(decode_bp, url_prefix=url_prefix)   # /decode
 app.register_blueprint(encode_bp, url_prefix=url_prefix)   # /encode
 app.register_blueprint(swaggerui_blueprint)                # Swagger UI
