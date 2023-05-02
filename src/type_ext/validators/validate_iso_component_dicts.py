@@ -1,7 +1,10 @@
 import re
 from datetime import datetime
-from type_ext import PrecisionType
-from type_ext import DateDict, TimeDict, PrecisionDict, TzDict
+from type_ext.precision_type import PrecisionType
+from type_ext.precision_dict import PrecisionDict
+from type_ext.tz_dict import TzDict
+from type_ext.time_dict import TimeDict
+from type_ext.date_dict import DateDict
 
 
 class ValidateDict:

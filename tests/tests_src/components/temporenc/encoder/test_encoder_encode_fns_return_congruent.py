@@ -1,4 +1,4 @@
-from tests_src.components.temporenc.tests_base import TestsBase
+from tests_src.test_support.tests_base import TestsBase
 from components.temporenc import Encoder, Utilities
 from components.parsers import Parse
 import datetime
