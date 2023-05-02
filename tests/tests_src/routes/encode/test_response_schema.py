@@ -14,7 +14,8 @@ class TestResponseSchema(unittest.TestCase):
     type_enum = ["TYPE_D", "TYPE_T", "TYPE_DT",
                  "TYPE_DTS", "TYPE_DTZ", "TYPE_DTSZ"]
 
-    precision_enum = ["PRECISION_MICRO", "PRECISION_MILLI", "PRECISION_NANO",
+    precision_enum = ["PRECISION_MICROSECOND", "PRECISION_MILLISECOND",
+                      "PRECISION_NANOSECOND",
                       "PRECISION_NONE", "PRECISION_NON_PRECISE"]
 
     def setUp(self):
