@@ -18,7 +18,7 @@ class TestTestsParseTzAwareStr(TestsParseIsoStringBase):
         for type_key in dp_keys:
             assert type_key not in ["TYPE_T"]  # Test requires date component
             for item in data_provider[type_key]:
-                with self.subTest(item['iso']):
+                with self.subTest(item["iso"]):
                     d = Parse.iso_to_iso_dict(f'{item["iso"]}')
                     actual: DateDict = d["components"]["date"]
                     expected = item["expected"]["components"]["date"]
@@ -33,7 +33,7 @@ class TestTestsParseTzAwareStr(TestsParseIsoStringBase):
         dp_keys = self.data_provider.keys()
         for type_key in dp_keys:
             for item in self.data_provider[type_key]:
-                with self.subTest(item['iso']):
+                with self.subTest(item["iso"]):
                     d = Parse.iso_to_iso_dict(f'{item["iso"]}')
                     actual = d["components"]["precision"]
                     expected = item["expected"]["components"]["precision"]
@@ -46,7 +46,7 @@ class TestTestsParseTzAwareStr(TestsParseIsoStringBase):
         dp_keys = self.data_provider.keys()
         for type_key in dp_keys:
             for item in self.data_provider[type_key]:
-                with self.subTest(item['iso']):
+                with self.subTest(item["iso"]):
                     d = Parse.iso_to_iso_dict(f'{item["iso"]}')
                     actual = d["components"]["time"]
                     expected = item["expected"]["components"]["time"]
@@ -62,7 +62,7 @@ class TestTestsParseTzAwareStr(TestsParseIsoStringBase):
         for type_key in dp_keys:
             assert type_key in ["TYPE_DTZ", "TYPE_DTSZ"]  # Test requires tz component
             for item in data_provider[type_key]:
-                with self.subTest(item['iso']):
+                with self.subTest(item["iso"]):
                     d = Parse.iso_to_iso_dict(item["iso"])
                     actual = d["components"]["tz"]
                     expected = item["expected"]["components"]["tz"]
