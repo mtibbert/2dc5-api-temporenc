@@ -14,7 +14,7 @@ class TestFnSubsecondFromIso(TestsParseIsoStringBase):
         dp_keys = [k for k in self.data_provider.keys() if "TS" in k]
         for type_key in dp_keys:
             for item in self.data_provider[type_key]:
-                with self.subTest(item['iso']):
+                with self.subTest(item["iso"]):
                     d = Parse.iso_to_iso_dict(f'{item["iso"]}')
                     actual = d["components"]["precision"]
                     expected = item["expected"]["components"]["precision"]
