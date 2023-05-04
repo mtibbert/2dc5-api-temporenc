@@ -21,10 +21,45 @@
     },
     {
       "name": "decode",
-      "description": "**[Not Implemented]** Decode Temporenc hexadecimal strings.\n"
+      "description": "Decode Temporenc hexadecimal strings."
     }
   ],
   "paths": {
+    "/decode/{encoded_str}": {
+      "get": {
+        "summary": "Decode a Temporenc encoded hexadecimal string",
+        "tags": [
+          "decode"
+        ],
+        "operationId": "do_decode_encoded_str",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "encoded_str",
+            "description": "Hexadecimal string string to decode.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Codec"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid encoded string"
+          }
+        }
+      }
+    },
     "/encode/{iso_string}": {
       "get": {
         "summary": "Encode an ISO string",
@@ -68,11 +103,11 @@
         "properties": {
           "decoded": {
             "type": "string",
-            "example": "57E72DC5B0078870"
+            "example": "E3F396E0D803DC40"
           },
           "encoded": {
             "type": "string",
-            "example": "2023-03-28T17:27:00.123Z"
+            "example": "2023-03-28T17:27:00.123+01:00"
           },
           "precision": {
             "type": "string",
@@ -93,10 +128,11 @@
             "example": "TYPE_DTS"
           }
         },
-        "example": {
-          "decoded": "57E72DC5B0078870",
-          "type": "TYPE_DTS",
-          "encoded": "2023-03-28T17:27:00.123Z"
+        "example":{
+          "decoded": "2023-03-28T17:27:00.123+01:00",
+          "encoded": "E3F396E0D803DC40",
+          "precision": "PRECISION_MILLISECOND",
+          "type_ext": "TYPE_DTSZ"
         }
       }
     }
