@@ -47,7 +47,7 @@
           "200": {
             "description": "OK",
             "content": {
-              "application/json": {
+              "application/json ": {
                 "schema": {
                   "$ref": "#/components/schemas/Codec"
                 }
@@ -55,7 +55,14 @@
             }
           },
           "400": {
-            "description": "Invalid encoded string"
+            "description": "Invalid encoded string",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Respose_404"
+                }
+              }
+            }
           }
         }
       }
@@ -133,6 +140,18 @@
           "encoded": "E3F396E0D803DC40",
           "precision": "PRECISION_MILLISECOND",
           "type_ext": "TYPE_DTSZ"
+        }
+      },
+      "Respose_404": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Resource not found: 'A3F396E0D803DC40' not recognized as TYPE_T"
+          }
+        },
+        "example":{
+          "message": "Resource not found: 'A3F396E0D803DC40' not recognized as TYPE_T"
         }
       }
     }
