@@ -1,9 +1,10 @@
 from tests_src.test_support.tests_base import TestsBase
 from tests_src.routes import dp_item_actual_expected_dict, get_response
 from src import app
+from unittest.mock import patch
 
 
-class TestDecodeGet(TestsBase):
+class TestDecodeBp(TestsBase):
 
     prefix_de = "/api/v1/temporenc/decode/"
     prefix_en = "/api/v1/temporenc/encode/"
@@ -127,6 +128,22 @@ class TestDecodeGet(TestsBase):
                     str(response.json["message"]).startswith(expected_msg_start),
                     f'expected "{response.json["message"]}" '
                     f'to start with "{expected_msg_start}"')
+
+    @patch('components.temporenc.decoder.Decoder.decode')
+    def test_response_404_err_msg_invalid_encoded_hex(self, mock_decode):
+        data_provider = [
+            {"arg": "8fffff0E", "type": "TYPE_D"},
+            {"arg": "bEFC1D264C", "type": "TYPE_T"},
+            {"arg": "1fff1D264C", "type": "a datetime"},
+        ]
+        for item in data_provider:
+            msg = f'\'{item["arg"]}\' not recognized as {item["type"]}'
+            expected = {'message': f'Resource not found: {msg}'}
+            mock_decode.side_effect = ValueError(msg)
+            with self.subTest(f'{item["arg"]} returns error message {msg}'):
+                response = self.app.get(f'{self.prefix_de}{item["arg"]}')
+                mock_decode.assert_called_with(item["arg"])
+                self.assertEqual(expected, response.json)
 
     def test_response_404_err_msg_non_hex_arg(self):
         for item in self.data_provider:
