@@ -1,4 +1,4 @@
-from tests_src.components.temporenc.tests_base import TestsBase
+from tests_src.test_support.tests_base import TestsBase
 from components.parsers.parse_iso_strings import Parse
 from components.temporenc import Encoder, Utilities
 from type_ext import IsoDict

@@ -1,6 +1,6 @@
 from components.temporenc import Encoder
 from components.temporenc.decoder import Decoder
-from tests_src.components.temporenc.tests_base import TestsBase
+from tests_src.test_support.tests_base import TestsBase
 from type_ext import TemporencType
 import datetime
 
